@@ -1,0 +1,1 @@
+/run/media/victorhugo-neo/LinWind/arqlinux/pj/portifolio/piseiroclub/piseiroclub_theme/AGENTS.md

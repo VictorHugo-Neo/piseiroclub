@@ -1,0 +1,202 @@
+<div class="hero-banner full-width">
+  <!-- Mídia de Fundo -->
+  {%- if section.settings.background_video != blank -%}
+    {{ section.settings.background_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, class: 'hero-banner__media' }}
+  {%- elsif section.settings.background_image != blank -%}
+    {{ section.settings.background_image | image_url: width: 2000 | image_tag: class: 'hero-banner__media', loading: 'eager' }}
+  {%- else -%}
+    {{ 'lifestyle-2' | placeholder_svg_tag: 'hero-banner__media placeholder-svg' }}
+  {%- endif -%}
+
+  <!-- Overlay Translúcido para Contraste -->
+  <div class="hero-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+
+  <!-- Conteúdo Centralizado -->
+  <div class="hero-banner__content">
+    {%- if section.settings.title != blank -%}
+      <h1 class="hero-banner__title">{{ section.settings.title | escape }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="hero-banner__subtitle">{{ section.settings.subtitle | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a href="{{ section.settings.button_link }}" class="hero-banner__btn">
+        {{ section.settings.button_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero-banner {
+    position: relative;
+    width: 100%;
+    min-height: 85vh; /* Altura generosa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-banner__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+  
+  .placeholder-svg {
+    background-color: var(--color-background, #f9f6f0);
+    fill: var(--color-pinhao, #5c2a1e);
+  }
+
+  .hero-banner__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    z-index: 2;
+  }
+
+  .hero-banner__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 2rem;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem; /* Espaçamento generoso entre elementos */
+  }
+
+  /* Regra 3: Hierarquia Visual - Título Principal de Grande Destaque */
+  .hero-banner__title {
+    font-size: clamp(3.5rem, 6vw + 1rem, 6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Regra 3: Hierarquia Visual - Subtítulo Menor e de Apoio */
+  .hero-banner__subtitle {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    max-width: 700px;
+  }
+
+  /* Regra 9: Lei de Fitts - CTA Gigante, acessível e centralizado */
+  .hero-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-whisky, #a9673c);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.5rem; /* Fonte grande */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1.5rem 4rem; /* Área de clique enorme */
+    margin-top: 1rem;
+    min-width: 320px;
+    min-height: 80px; /* Impossível errar o clique */
+    border-radius: 50px; /* Cantos arredondados */
+    box-shadow: 0 8px 25px rgba(169, 103, 60, 0.4);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hero-banner__btn:hover,
+  .hero-banner__btn:focus {
+    background-color: #8c532f; /* Tom levemente escurecido no hover */
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(169, 103, 60, 0.5);
+    outline: none;
+  }
+
+  /* Otimização Móvel - Botão ocupa quase toda a largura para evitar erro de clique */
+  @media screen and (max-width: 768px) {
+    .hero-banner {
+      min-height: 75vh;
+    }
+    
+    .hero-banner__btn {
+      width: 100%;
+      max-width: 450px;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.2rem;
+      min-height: 75px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Banner de Destaque",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Sinta o Ritmo do Forró"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "O par de calçados ideal para você dançar a noite inteira com conforto, firmeza e muito estilo."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagem de Fundo",
+      "info": "Recomendado: Casais dançando forró (Alta Resolução)."
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Vídeo de Fundo",
+      "info": "Selecione um vídeo para substituir a imagem. Será reproduzido automaticamente e sem som."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacidade do Fundo Escuro (Overlay)",
+      "default": 55,
+      "info": "Aumente para garantir maior legibilidade do texto e contraste (Regra 3)."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do Botão (CTA)",
+      "default": "Ver Calçados"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do Botão"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner de Destaque"
+    }
+  ]
+}
+{% endschema %}
