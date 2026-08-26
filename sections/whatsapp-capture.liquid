@@ -1,0 +1,160 @@
+<div class="whatsapp-banner">
+  <div class="whatsapp-banner__container">
+    <div class="whatsapp-banner__content">
+      <!-- Regra 3: Hierarquia Visual. Título denso e subtítulo de apoio leve -->
+      <h2 class="whatsapp-banner__title">{{ section.settings.title }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="whatsapp-banner__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Filtros Liquid para higienizar o número e encodar o texto da mensagem -->
+    {%- assign clean_phone = section.settings.phone_number | replace: '+', '' | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace: ')', '' -%}
+    {%- assign encoded_message = section.settings.message | url_encode -%}
+    {%- assign whatsapp_url = "https://wa.me/" | append: clean_phone | append: "?text=" | append: encoded_message -%}
+
+    <!-- Botão de Ação Direta pro App -->
+    <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="whatsapp-banner__btn">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.031 2c-5.492 0-9.957 4.465-9.957 9.956 0 1.745.454 3.447 1.317 4.954L2 22l5.244-1.374a9.923 9.923 0 004.787 1.233h.004c5.489 0 9.954-4.464 9.954-9.954C21.989 6.467 17.52 2 12.031 2zm5.474 14.34c-.226.634-1.317 1.222-1.815 1.298-.445.068-1.02.164-3.238-.755-2.673-1.11-4.382-3.83-4.516-4.008-.135-.178-1.08-1.442-1.08-2.753 0-1.312.686-1.956.929-2.221.242-.266.529-.333.705-.333.176 0 .353.001.507.008.163.007.382-.061.597.46.226.549.771 1.884.841 2.025.07.141.117.306.027.485-.091.179-.136.29-.272.449-.136.158-.288.342-.409.471-.131.143-.27.302-.116.568.154.267.685 1.135 1.472 1.84.156.14.321.27.493.385.127.086.262.16.4.225.266.126.635.487 1.157.555.334.043.69-.17.929-.446.241-.277 1.042-1.216 1.317-1.636.276-.421.551-.35.96-.2 1.761.642 3.82 2.015 4.025 2.217.206.202.342.304.391.474.05.17.05.986-.176 1.621z"></path>
+      </svg>
+      {{ section.settings.button_label }}
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .whatsapp-banner {
+    /* Regra 7: Espaço em branco mantendo o banner respirável */
+    max-width: var(--page-width, 1200px);
+    margin: 4rem auto;
+    padding: 0 var(--page-margin, 64px);
+  }
+
+  .whatsapp-banner__container {
+    background-color: var(--color-background, #f9f6f0);
+    border: 2px solid #25D366; /* Moldura verde marcante do App */
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.08); /* Sombra difusa verde */
+  }
+
+  .whatsapp-banner__content {
+    flex: 1;
+  }
+
+  .whatsapp-banner__title {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+  }
+
+  .whatsapp-banner__subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .whatsapp-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background-color: #25D366; /* Verde Oficial do WhatsApp */
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    padding: 1.2rem 2.5rem;
+    border-radius: 40px; /* Lei de Fitts: Botão Pílula Gigante */
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+    min-height: 60px;
+  }
+
+  .whatsapp-banner__btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .whatsapp-banner__btn:hover {
+    background-color: #1ebe57; /* Verde sutilmente mais forte no hover */
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4);
+  }
+
+  @media screen and (max-width: 900px) {
+    .whatsapp-banner {
+      padding: 0 1.5rem;
+    }
+    
+    .whatsapp-banner__container {
+      flex-direction: column;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      gap: 2rem;
+    }
+    
+    .whatsapp-banner__btn {
+      width: 100%; /* Botão ocupa 100% no mobile (Lei de Fitts para conversão) */
+      padding: 1.25rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Captura WhatsApp",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Dúvidas sobre o tamanho do sapato?"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Nossa equipe de especialistas em dança está pronta para te ajudar a escolher o par perfeito."
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Número do WhatsApp",
+      "info": "Código do País + DDD + Número. Ex: 5511999999999",
+      "default": "5511999999999"
+    },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Mensagem Automática",
+      "info": "Texto pré-preenchido que o cliente envia ao abrir o app.",
+      "default": "Olá! Gostaria de tirar uma dúvida sobre os calçados de forró."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do Botão",
+      "default": "Falar no WhatsApp"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner WhatsApp (Suporte)"
+    }
+  ]
+}
+{% endschema %}

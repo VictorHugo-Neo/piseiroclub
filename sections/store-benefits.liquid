@@ -1,0 +1,159 @@
+<div class="store-benefits">
+  <div class="store-benefits__container">
+    {%- for block in section.blocks -%}
+      <!-- Regra 1: Simplicidade. Bloco extremamente limpo. -->
+      <div class="store-benefits__item" {{ block.shopify_attributes }}>
+        <div class="store-benefits__icon">
+          {%- if block.settings.custom_svg != blank -%}
+            {{ block.settings.custom_svg }}
+          {%- else -%}
+            <!-- Fallback Minimalista -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          {%- endif -%}
+        </div>
+        <div class="store-benefits__text">
+          <h3 class="store-benefits__title">{{ block.settings.title }}</h3>
+          <p class="store-benefits__desc">{{ block.settings.text }}</p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .store-benefits {
+    /* Fundo Off-White Quente garantindo leitura suave (Variável Global do Tema) */
+    background-color: var(--color-background, #f9f6f0);
+    padding: 5rem 1.5rem;
+    border-top: 1px solid rgba(92, 42, 30, 0.08); /* Linha divisória sutil cor pinhão */
+    border-bottom: 1px solid rgba(92, 42, 30, 0.08);
+  }
+
+  .store-benefits__container {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    
+    /* Layout Equilibrado Desktop */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+  }
+
+  .store-benefits__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  /* Ícone Minimalista */
+  .store-benefits__icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    color: var(--color-whisky, #a9673c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(169, 103, 60, 0.08); /* Fundo sutil do ícone na cor whisky */
+    border-radius: 50%;
+    padding: 0.8rem;
+  }
+  
+  .store-benefits__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .store-benefits__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .store-benefits__desc {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Mobile: Empilhamento vertical */
+  @media screen and (max-width: 768px) {
+    .store-benefits {
+      padding: 3.5rem 1.5rem;
+    }
+    .store-benefits__container {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Diferenciais Técnicos",
+  "max_blocks": 4,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Diferencial",
+      "settings": [
+        {
+          "type": "html",
+          "id": "custom_svg",
+          "label": "Ícone SVG Personalizado",
+          "info": "Cole o código SVG minimalista aqui. Deixe vazio para usar um ícone genérico."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título Principal",
+          "default": "Sola de Camurça"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto Secundário",
+          "default": "Deslize perfeito no salão sem perder a estabilidade na hora do giro."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Diferenciais Técnicos",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Sola Especial",
+            "text": "Giro livre e movimentos precisos em qualquer piso."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Flexibilidade",
+            "text": "O calçado acompanha a dobra natural do seu pé no forró."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "title": "Leveza",
+            "text": "Sinta-se dançando descalço por horas sem cansar."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

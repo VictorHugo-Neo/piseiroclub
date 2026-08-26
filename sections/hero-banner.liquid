@@ -3,7 +3,11 @@
   {%- if section.settings.background_video != blank -%}
     {{ section.settings.background_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, class: 'hero-banner__media' }}
   {%- elsif section.settings.background_image != blank -%}
-    {{ section.settings.background_image | image_url: width: 2000 | image_tag: class: 'hero-banner__media', loading: 'eager' }}
+    <picture>
+      <source media="(max-width: 768px)" srcset="{{ section.settings.background_image | image_url: width: 400 }}">
+      <source media="(min-width: 769px)" srcset="{{ section.settings.background_image | image_url: width: 2000 }}">
+      {{ section.settings.background_image | image_url: width: 2000 | image_tag: class: 'hero-banner__media', loading: 'eager' }}
+    </picture>
   {%- else -%}
     {{ 'lifestyle-2' | placeholder_svg_tag: 'hero-banner__media placeholder-svg' }}
   {%- endif -%}

@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "whatsapp": {
+      "type": "whatsapp-capture",
+      "settings": {}
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "title": "Complete seu visual"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "whatsapp",
+    "related"
+  ]
+}

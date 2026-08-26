@@ -1,0 +1,313 @@
+<div class="product-main">
+  <!-- Navegação Estrutural (Breadcrumbs) -->
+  <nav class="breadcrumb" aria-label="Navegação estrutural">
+    <a href="{{ routes.root_url }}">Início</a>
+    <span aria-hidden="true">&rsaquo;</span>
+    {% if collection %}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+      <span aria-hidden="true">&rsaquo;</span>
+    {% endif %}
+    <span>{{ product.title }}</span>
+  </nav>
+
+  <!-- Regra 5: Padrão F (Esquerda: Galeria, Direita: Informações de Compra) -->
+  <div class="product-layout">
+    
+    <!-- Regra 2: Razão Áurea (~61.8%) - Galeria de Imagens -->
+    <div class="product-gallery">
+      {%- for media in product.media -%}
+        <div class="product-gallery__item">
+          <picture>
+            <!-- Carrega versão minúscula e econômica (400px) no Mobile -->
+            <source media="(max-width: 768px)" srcset="{{ media | image_url: width: 400 }}">
+            <!-- Carrega versão Full HD (1200px) no Desktop -->
+            <source media="(min-width: 769px)" srcset="{{ media | image_url: width: 1200 }}">
+            {{ media | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+          </picture>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <!-- Regra 2: Razão Áurea (~38.2%) - Informações -->
+    <div class="product-details">
+      <h1 class="product-title">{{ product.title }}</h1>
+      
+      <!-- Hierarquia de Preços -->
+      <div class="product-pricing">
+        <span class="product-price--pix">
+          {{ product.price | times: 0.9 | money }} <span class="pix-label">no Pix (10% off)</span>
+        </span>
+        <span class="product-price--installments">
+          ou 12x de {{ product.price | divided_by: 12 | money }}
+        </span>
+        {% if product.compare_at_price > product.price %}
+          <span class="product-price--original">De: <s>{{ product.compare_at_price | money }}</s></span>
+        {% endif %}
+      </div>
+
+      <!-- Descrição Técnica em Lista para Escaneabilidade (Padrão F) -->
+      <div class="product-description-tech">
+        <h3>Especificações Técnicas:</h3>
+        <ul>
+          <li><strong>Material:</strong> Couro legítimo flexível, ideal para respirabilidade.</li>
+          <li><strong>Solado:</strong> Sola de cromo especial para deslizar e girar facilmente no forró.</li>
+          <li><strong>Palmilha:</strong> EVA acolchoado garantindo conforto para a noite toda.</li>
+          <li><strong>Peso:</strong> Levíssimo, menos de 300g o par.</li>
+        </ul>
+        <div class="product-description-full">
+          {{ product.description }}
+        </div>
+      </div>
+
+      <!-- Formulário de Compra -->
+      <div class="product-form">
+        {% form 'product', product %}
+          <!-- Variantes / Tamanhos -->
+          <div class="product-form__variants">
+            <label for="variant-select">Selecione o Tamanho:</label>
+            <select name="id" id="variant-select">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                  {{ variant.title }} {% unless variant.available %} - Esgotado{% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Regra 9: Lei de Fitts (Botão Gigante Próximo ao Seletor) -->
+          <button type="submit" name="add" class="btn-buy" {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}
+              Comprar Agora
+            {% else %}
+              Esgotado
+            {% endif %}
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-main {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 2rem var(--page-margin, 64px);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+  .breadcrumb a {
+    color: var(--color-pinhao, #5c2a1e);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumb span {
+    margin: 0 0.5rem;
+  }
+
+  .product-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  @media screen and (min-width: 900px) {
+    .product-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    
+    /* Regra 2: Razão Áurea (~61.8% e 38.2%) */
+    .product-gallery {
+      flex: 0 0 calc(61.8% - 1.5rem);
+      max-width: calc(61.8% - 1.5rem);
+    }
+    .product-details {
+      flex: 0 0 calc(38.2% - 1.5rem);
+      max-width: calc(38.2% - 1.5rem);
+      position: sticky;
+      top: 7rem; /* Mantém as informações fixas ao descer pelas imagens */
+    }
+  }
+
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .product-gallery__item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .product-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  /* Hierarquia Visual Forte nos Preços */
+  .product-pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background-color: #f2f7f4;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 5px solid #1a7b45;
+  }
+  .product-price--pix {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 800;
+    color: #1a7b45; /* Verde vibrante para destacar a melhor oferta */
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    line-height: 1;
+  }
+  .pix-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a7b45;
+  }
+  .product-price--installments {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 500;
+  }
+  .product-price--original {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 0.5rem;
+  }
+
+  /* Especificações e Descrição */
+  .product-description-tech h3 {
+    font-size: 1.2rem;
+    color: var(--color-pinhao, #5c2a1e);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  .product-description-tech ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .product-description-tech li {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: #444;
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .product-description-tech li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-whisky, #a9673c);
+    font-weight: bold;
+  }
+  
+  .product-description-full {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* Variantes */
+  .product-form__variants {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem; /* Próximo ao botão de compra (Lei de Fitts) */
+  }
+  .product-form__variants label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--color-pinhao, #5c2a1e);
+  }
+  .product-form__variants select {
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .product-form__variants select:focus {
+    outline: none;
+    border-color: var(--color-whisky, #a9673c);
+  }
+
+  /* Regra 9: Lei de Fitts - Botão Gigante */
+  .btn-buy {
+    width: 100%;
+    min-height: 85px; /* Área de clique enorme */
+    background-color: var(--color-whisky, #a9673c);
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    border-radius: 12px; /* Cantos arredondados */
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(169, 103, 60, 0.4);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-buy:hover {
+    background-color: #8c532f;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(169, 103, 60, 0.5);
+  }
+  .btn-buy:active {
+    transform: translateY(0);
+  }
+  .btn-buy:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Produto Principal",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Produto Principal"
+    }
+  ]
+}
+{% endschema %}

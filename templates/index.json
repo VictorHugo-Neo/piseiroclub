@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "title": "Sinta o Ritmo do Forró",
+        "subtitle": "O par de calçados ideal para você dançar a noite inteira com conforto, firmeza e muito estilo.",
+        "overlay_opacity": 55,
+        "button_label": "Ver Calçados",
+        "button_link": "shopify:\/\/collections\/all"
+      }
+    },
+    "benefits": {
+      "type": "store-benefits",
+      "settings": {}
+    },
+    "destaques": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Mais Vendidos",
+        "description": "Os calçados mais procurados pelos dançarinos de Piseiro e Forró.",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "social": {
+      "type": "social-proof",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter-vip",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "benefits",
+    "destaques",
+    "social",
+    "newsletter"
+  ]
+}

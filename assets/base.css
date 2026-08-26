@@ -1,0 +1,110 @@
+/* assets/base.css */
+
+/*
+ * Regra 21: Capacidade de Resposta
+ * O CSS deve lidar naturalmente com a fluidez dos elementos.
+ * Utilizando clamp(), Flexbox, e Grid Fractional Units (fr).
+ */
+
+/* 1. Resets e Box Sizing Global */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%; /* Ponto de partida padrão (geralmente 16px) */
+  -webkit-text-size-adjust: 100%; /* Previne ajuste forçado em dispositivos móveis no modo paisagem */
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  
+  /* Impede barra de rolagem horizontal em telas minúsculas (menores que 320px) */
+  min-width: 320px;
+  overflow-x: hidden;
+  
+  font-family: var(--font-primary, sans-serif);
+  color: var(--color-pinhao, #5c2a1e);
+  background-color: var(--color-background, #f9f6f0);
+}
+
+/* 2. Tipografia Fluida (Evitando 'px' fixos) */
+/* O clamp(min, preferencial, max) garante que as fontes se ajustem ao tamanho da janela suavemente */
+
+h1, .h1 {
+  /* Mínimo de 32px (2rem), ideal baseado em viewport (5vw), máximo de 56px (3.5rem) */
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  margin-top: 0;
+}
+
+h2, .h2 {
+  font-size: clamp(1.75rem, 4vw, 2.8rem);
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+h3, .h3 {
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 1.3;
+  margin-top: 0;
+}
+
+h4, h5, h6 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.4;
+  margin-top: 0;
+}
+
+p, a, li, span, input, button, textarea {
+  /* Texto base fluindo suavemente entre 16px (1rem) e 18px (1.125rem) */
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+/* 3. Imagens e Mídias Responsivas */
+img,
+picture,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Remove o espaço fantasma na parte inferior de imagens */
+}
+
+/* 4. Layouts Base Flexíveis e Fluidos */
+
+/* Container Principal com limites flexíveis */
+.page-container {
+  width: 100%;
+  max-width: var(--page-width, 1200px);
+  margin: 0 auto;
+  padding: 0 var(--page-margin, 5%);
+}
+
+/* Utilitário Grid Fluido (Sem quebras manuais) */
+.grid-fluid {
+  display: grid;
+  /* Cria colunas automaticamente baseadas no tamanho do elemento minmax.
+     Nenhum item ficará menor que 280px. Se couber mais, ele cria mais fr (frações) */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap, 2rem);
+}
+
+/* Utilitário Flex Fluido */
+.flex-fluid {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os elementos desçam para a próxima linha */
+  gap: var(--flex-gap, 2rem);
+}
+
+.flex-fluid > * {
+  /* O elemento pode encolher (1), crescer (1) e ocupa originalmente 50% menos o gap.
+     Se a tela for muito pequena, o 'min-width' força a quebra para 100% (empilhamento no celular) */
+  flex: 1 1 calc(50% - var(--flex-gap, 2rem));
+  min-width: 280px;
+}

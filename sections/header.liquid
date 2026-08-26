@@ -1,0 +1,342 @@
+<header class="header">
+  <!-- Checkbox hack para Drawer CSS puro (Regra 1: Simplicidade, sem JS complexo) -->
+  <input type="checkbox" id="MobileMenuToggle" class="mobile-menu-checkbox" aria-hidden="true">
+  
+  <!-- Regra 9 (Fitts): Ícone de Hambúrguer com no mínimo 48x48px de área clicável -->
+  <label for="MobileMenuToggle" class="header__hamburger" aria-label="Abrir menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </label>
+
+  <!-- Gaveta Lateral Mobile (Drawer) -->
+  <div class="mobile-drawer">
+    <label for="MobileMenuToggle" class="mobile-drawer__overlay" aria-label="Fechar menu"></label>
+    <div class="mobile-drawer__content">
+      <div class="mobile-drawer__header">
+        <span class="mobile-drawer__title">{{ shop.name }}</span>
+        <!-- Regra 9 (Fitts): Botão de Fechar 48x48px -->
+        <label for="MobileMenuToggle" class="mobile-drawer__close" aria-label="Fechar menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </label>
+      </div>
+      <nav class="mobile-drawer__nav">
+        {%- if section.settings.menu != blank -%}
+          {%- for link in section.settings.menu.links -%}
+            <!-- Regra 9 (Fitts): Links altos com preenchimento para facilitar toque -->
+            <a href="{{ link.url }}" class="mobile-drawer__link">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ routes.all_products_collection_url }}" class="mobile-drawer__link">Calçados</a>
+          <a href="{{ routes.all_products_collection_url }}" class="mobile-drawer__link">Acessórios</a>
+        {%- endif -%}
+      </nav>
+    </div>
+  </div>
+
+  <!-- Regra 6: Padrão Z - Logotipo -->
+  <a href="{{ routes.root_url }}" class="header__logo">
+    {{ shop.name }}
+  </a>
+
+  <!-- Regra 6 e 8: Menu centralizado e simplificado Desktop -->
+  <nav class="header__menu" aria-label="Menu Principal">
+    {%- if section.settings.menu != blank -%}
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}" class="header__menu-item">{{ link.title }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Fallback -->
+      <a href="{{ routes.all_products_collection_url }}" class="header__menu-item">Calçados</a>
+      <a href="{{ routes.all_products_collection_url }}" class="header__menu-item">Acessórios</a>
+    {%- endif -%}
+  </nav>
+
+  <!-- Regra 6: Padrão Z - Ícones utilitários à direita -->
+  <div class="header__icons">
+    <a href="{{ routes.search_url }}" class="header__icon" aria-label="Buscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </a>
+
+    {%- if shop.customer_accounts_enabled -%}
+      <a href="{{ routes.account_url }}" class="header__icon" aria-label="Minha Conta">
+        {%- if 'icon-account.svg' != blank -%}
+          {{ 'icon-account.svg' | inline_asset_content }}
+        {%- else -%}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+
+    <a href="{{ routes.cart_url }}" class="header__icon" aria-label="Carrinho">
+      {{ 'icon-cart.svg' | inline_asset_content }}
+      {%- if cart.item_count > 0 -%}
+        <sup class="header__cart-count">{{ cart.item_count }}</sup>
+      {%- endif -%}
+    </a>
+  </div>
+</header>
+
+{% stylesheet %}
+  .header {
+    background-color: var(--color-background, #f9f6f0);
+    box-shadow: 0 4px 15px rgba(92, 42, 30, 0.06);
+    height: 5rem;
+    padding: 0 var(--page-margin, 64px);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header__logo {
+    justify-self: start;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-pinhao, #5c2a1e);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+
+  /* Hamburger logic hidden on desktop */
+  .mobile-menu-checkbox,
+  .header__hamburger,
+  .mobile-drawer {
+    display: none;
+  }
+
+  .header__menu {
+    justify-self: center;
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .header__menu-item {
+    text-decoration: none;
+    color: var(--color-foreground, #5c2a1e);
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .header__menu-item:hover {
+    opacity: 0.7;
+    color: var(--color-whisky, #a9673c);
+  }
+
+  .header__icons {
+    justify-self: end;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  /* Regra 9: Fitts Law aplicada nos ícones desktop também */
+  .header__icon {
+    text-decoration: none;
+    color: var(--color-foreground, #5c2a1e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    min-height: 48px;
+    position: relative;
+    transition: opacity 0.2s ease;
+  }
+  
+  .header__icon:hover {
+    opacity: 0.7;
+    color: var(--color-whisky, #a9673c);
+  }
+
+  .header__icon svg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    background-color: var(--color-whisky, #a9673c);
+    color: #fff;
+    font-size: 0.7rem;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+    border-radius: 2rem;
+    font-weight: 700;
+  }
+
+  /* --- MOBILE CSS (< 768px) --- */
+  @media screen and (max-width: 768px) {
+    .header {
+      padding: 0 1.5rem;
+      /* Grid altera: Hambúrguer(Esquerda) - Logo(Centro) - Ícones(Direita) */
+      grid-template-columns: 1fr auto 1fr;
+    }
+    
+    .header__menu {
+      display: none;
+    }
+
+    .header__logo {
+      justify-self: center; /* Centraliza logo no mobile */
+    }
+
+    /* Regra 9: O botão hambúrguer é fácil de clicar com 48x48 */
+    .header__hamburger {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      min-width: 48px;
+      min-height: 48px;
+      cursor: pointer;
+      color: var(--color-pinhao, #5c2a1e);
+    }
+
+    .header__hamburger svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Lógica do Drawer com Checkbox (Regra 1: Simplicidade sem JS) */
+    .mobile-drawer {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .mobile-drawer__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .mobile-drawer__content {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 85%;
+      max-width: 320px;
+      height: 100%;
+      background-color: var(--color-background, #f9f6f0);
+      box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      pointer-events: auto;
+    }
+
+    /* Gatilho visual ao marcar o checkbox */
+    .mobile-menu-checkbox:checked ~ .mobile-drawer {
+      visibility: visible;
+      pointer-events: auto;
+    }
+    
+    .mobile-menu-checkbox:checked ~ .mobile-drawer .mobile-drawer__overlay {
+      opacity: 1;
+    }
+
+    .mobile-menu-checkbox:checked ~ .mobile-drawer .mobile-drawer__content {
+      left: 0;
+    }
+
+    /* Header interno da gaveta */
+    .mobile-drawer__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(92, 42, 30, 0.1);
+    }
+
+    .mobile-drawer__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-pinhao, #5c2a1e);
+    }
+
+    /* Regra 9: Botão de fechar grande (Fitts) */
+    .mobile-drawer__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      min-height: 48px;
+      cursor: pointer;
+      color: var(--color-pinhao, #5c2a1e);
+      margin-right: -12px; /* Ajuste visual mantendo área de clique alta */
+    }
+
+    .mobile-drawer__close svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Regra 9: Links do Menu com enorme área de clique vertical */
+    .mobile-drawer__nav {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 0;
+      overflow-y: auto;
+    }
+
+    .mobile-drawer__link {
+      display: flex;
+      align-items: center;
+      min-height: 60px; /* Acima dos 48px exigidos pela Lei de Fitts */
+      padding: 0 1.5rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--color-pinhao, #5c2a1e);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(92, 42, 30, 0.05);
+      transition: background-color 0.2s ease;
+    }
+
+    .mobile-drawer__link:active {
+      background-color: rgba(169, 103, 60, 0.1); /* Feedback visual no toque */
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cabeçalho Principal",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu Principal",
+      "info": "Para alta conversão (Lei de Hick), prefira links diretos como 'Calçados' e 'Acessórios'. Submenus não serão exibidos."
+    }
+  ]
+}
+{% endschema %}

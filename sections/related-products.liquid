@@ -1,0 +1,204 @@
+<div class="related-products-section">
+  <!-- Regra 1: Simplicidade no topo, chamando para a ação sem distrações -->
+  {%- if section.settings.title != blank -%}
+    <h2 class="related-products__title">{{ section.settings.title }}</h2>
+  {%- endif -%}
+
+  <!-- Mobile: Carrossel de Rolagem Suave | Desktop: 4 Colunas -->
+  <div class="related-products__grid">
+    {%- assign related_collection = collections[section.settings.collection] -%}
+    
+    {%- if related_collection != blank and related_collection.products_count > 0 -%}
+      {%- for product_item in related_collection.products limit: 4 -%}
+        <!-- Regra 11: Lei da Proximidade - Bloco coeso conectando imagem, título, preço e botão -->
+        <a href="{{ product_item.url }}" class="product-card">
+          <div class="product-card__image-wrapper">
+            {{ product_item.featured_image | image_url: width: 600 | image_tag: class: 'product-card__image', loading: 'lazy' }}
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__title">{{ product_item.title }}</h3>
+            <span class="product-card__price">{{ product_item.price | money }}</span>
+            <span class="product-card__btn">Comprar</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Fallback caso nenhuma coleção seja selecionada -->
+      {%- for i in (1..4) -%}
+        <div class="product-card">
+          <div class="product-card__image-wrapper">
+            {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+          <div class="product-card__info">
+            <h3 class="product-card__title">Acessório de Forró</h3>
+            <span class="product-card__price">{{ 4990 | money }}</span>
+            <span class="product-card__btn">Comprar</span>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .related-products-section {
+    max-width: var(--page-width, 1200px);
+    margin: 4rem auto;
+    padding: 0 var(--page-margin, 64px);
+  }
+
+  .related-products__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-pinhao, #5c2a1e);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  /* Grid Desktop: 4 colunas */
+  .related-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  /* Regra 11: Lei da Proximidade (Gestalt)
+     O card cria um limite invisível que força o cérebro a associar todos os elementos internos. */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--color-background, #f9f6f0);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(92, 42, 30, 0.1);
+  }
+
+  .product-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background-color: #eaeaea;
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover .product-card__image {
+    transform: scale(1.05); /* Leve zoom ao focar */
+  }
+
+  .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    fill: #c0c0c0;
+  }
+
+  /* Proximidade dos elementos de conversão */
+  .product-card__info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem; 
+  }
+
+  .product-card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .product-card__price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1a7b45;
+  }
+
+  .product-card__btn {
+    margin-top: 0.8rem;
+    background-color: var(--color-whisky, #a9673c);
+    color: #fff;
+    padding: 0.7rem 1.8rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Mobile: Carrossel Horizontal (CSS Scroll Snap) */
+  @media screen and (max-width: 768px) {
+    .related-products-section {
+      padding: 0 0 0 1.5rem; /* Padding esquerdo, tira da direita para fluir */
+    }
+    
+    .related-products__title {
+      padding-right: 1.5rem;
+    }
+    
+    .related-products__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      padding-right: 1.5rem;
+      
+      /* Oculta scrollbar nativo */
+      scrollbar-width: none; 
+      -ms-overflow-style: none;
+    }
+    
+    .related-products__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .product-card {
+      /* Ocupa 75% da tela, mostrando sutilmente que há mais itens à direita */
+      flex: 0 0 75%; 
+      scroll-snap-align: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Produtos Relacionados",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título da Seção",
+      "default": "Complete seu visual de Forró"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Coleção de Acessórios (Cross-sell)",
+      "info": "Selecione uma coleção de acessórios. Exibiremos 4 produtos."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produtos Relacionados (Cross-sell)"
+    }
+  ]
+}
+{% endschema %}

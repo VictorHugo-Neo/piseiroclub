@@ -1,0 +1,206 @@
+<div class="newsletter-vip-section">
+  <div class="newsletter-vip__container">
+    <!-- Regra 1: Simplicidade - Títulos diretos focados em reter atenção -->
+    <h2 class="newsletter-vip__title">{{ section.settings.title }}</h2>
+    <p class="newsletter-vip__desc">{{ section.settings.description }}</p>
+
+    <!-- Utilização da tag nativa do Shopify para cair direto em Clientes -->
+    {% form 'customer', class: 'newsletter-vip__form' %}
+      <!-- Tag escondida que rotula automaticamente o cliente -->
+      <input type="hidden" name="contact[tags]" value="newsletter, prospect">
+      
+      {%- if form.posted_successfully? -%}
+        <div class="newsletter-vip__success" role="alert">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <p>Obrigado! Seu cupom de 10% OFF foi enviado com sucesso para o seu e-mail.</p>
+        </div>
+      {%- else -%}
+        {%- if form.errors -%}
+          <div class="newsletter-vip__error" role="alert">
+            <p>Opa! {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</p>
+          </div>
+        {%- endif -%}
+
+        <div class="newsletter-vip__input-group">
+          <!-- Regra 9: Lei de Fitts - O usuário não fará esforço nenhum para preencher e clicar -->
+          <input 
+            type="email" 
+            name="contact[email]" 
+            id="NewsletterVIPEmail" 
+            class="newsletter-vip__input" 
+            placeholder="Digite seu melhor e-mail..." 
+            aria-label="Endereço de e-mail" 
+            required
+            autocorrect="off"
+            autocapitalize="off"
+          >
+          <button type="submit" class="newsletter-vip__btn">
+            Quero Meu Desconto
+          </button>
+        </div>
+      {%- endif -%}
+    {% endform %}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* Regra 7: Espaço em Branco abundante (respiro visual) */
+  .newsletter-vip-section {
+    background-color: var(--color-background, #f9f6f0);
+    padding: 7rem 1.5rem;
+    margin: 4rem 0 0 0;
+    border-top: 1px solid rgba(92, 42, 30, 0.08); /* Separação sutil usando Pinhão */
+  }
+
+  .newsletter-vip__container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .newsletter-vip__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0 0 1rem 0;
+    line-height: 1.1;
+  }
+
+  .newsletter-vip__desc {
+    font-size: 1.2rem;
+    color: #555;
+    margin: 0 0 3rem 0;
+    line-height: 1.5;
+  }
+
+  .newsletter-vip__form {
+    width: 100%;
+    max-width: 650px;
+  }
+
+  /* Campos e botões alinhados lateralmente no Desktop */
+  .newsletter-vip__input-group {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  /* Lei de Fitts: Altura de 75px facilita o alcance em telas de toque */
+  .newsletter-vip__input {
+    flex: 1;
+    min-height: 75px;
+    padding: 0 1.8rem;
+    font-size: 1.15rem;
+    border: 2px solid rgba(92, 42, 30, 0.15);
+    border-radius: 40px; /* Arredondamento elegante */
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .newsletter-vip__input:focus {
+    border-color: var(--color-whisky, #a9673c);
+    box-shadow: 0 0 0 4px rgba(169, 103, 60, 0.15);
+  }
+
+  /* Botão massivo - Regra 9 Fitts */
+  .newsletter-vip__btn {
+    min-height: 75px;
+    padding: 0 2.5rem;
+    background-color: var(--color-whisky, #a9673c);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(169, 103, 60, 0.3);
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .newsletter-vip__btn:hover {
+    background-color: #8c532f;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(169, 103, 60, 0.4);
+  }
+
+  /* Notificações minimalistas (Regra 1) */
+  .newsletter-vip__success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background-color: #eaf5ec;
+    color: #1a7b45;
+    padding: 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  
+  .newsletter-vip__success svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .newsletter-vip__error {
+    color: #d93025;
+    background-color: #fce8e6;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  /* Mobile: Empilhamento dos campos em blocos longos horizontais (Gatilho Fitts Mobile) */
+  @media screen and (max-width: 600px) {
+    .newsletter-vip-section {
+      padding: 5rem 1.5rem;
+    }
+    
+    .newsletter-vip__input-group {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .newsletter-vip__input,
+    .newsletter-vip__btn {
+      width: 100%;
+      border-radius: 16px; /* Quebra o formato pílula para blocos horizontais preenchidos */
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter VIP",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Inscreva-se no Clube e ganhe 10% OFF na primeira compra"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descrição",
+      "default": "Receba em primeira mão novidades sobre calçados, convites para bailes e ofertas exclusivas."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter VIP"
+    }
+  ]
+}
+{% endschema %}
