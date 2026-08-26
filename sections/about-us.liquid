@@ -1,0 +1,241 @@
+<section class="about-us about-us-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="container">
+    <!-- Grid Z-Pattern (Regra 6) -->
+    <div class="about-us__grid {% if section.settings.layout == 'image_right' %}about-us__grid--reverse{% endif %}">
+      
+      <!-- Bloco de Imagem -->
+      <div class="about-us__image-wrapper">
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 800 }}"
+               alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
+               class="about-us__image"
+               width="800"
+               height="auto"
+               loading="lazy">
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg about-us__placeholder' }}
+        {%- endif -%}
+      </div>
+
+      <!-- Bloco de Conteúdo / Storytelling -->
+      <div class="about-us__content">
+        {%- if section.settings.subtitle != blank -%}
+          <span class="about-us__subtitle">{{ section.settings.subtitle }}</span>
+        {%- endif -%}
+        
+        {%- if section.settings.title != blank -%}
+          <h2 class="about-us__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        
+        {%- if section.settings.text != blank -%}
+          <div class="about-us__text">
+            {{ section.settings.text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <a href="{{ section.settings.button_link }}" class="about-us__button">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  /* Regra 7: Espaço em branco generoso (Whitespace) */
+  .about-us {
+    padding: 6rem 0;
+  }
+
+  .about-us .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .about-us__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  /* Desktop: 2 colunas */
+  @media screen and (min-width: 768px) {
+    .about-us__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+    
+    /* Configuração opcional para imagem à direita */
+    .about-us__grid--reverse .about-us__image-wrapper {
+      order: 2;
+    }
+    
+    .about-us__grid--reverse .about-us__content {
+      order: 1;
+    }
+  }
+
+  /* --- IMAGEM --- */
+  .about-us__image-wrapper {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    /* Sombra elegante e quente baseada na cor Pinhão */
+    box-shadow: 0 15px 35px rgba(92, 42, 30, 0.1); 
+  }
+
+  .about-us__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4/5;
+    transition: transform 0.5s ease;
+  }
+  
+  .about-us__image-wrapper:hover .about-us__image {
+    transform: scale(1.03); /* Micro-interação visual */
+  }
+
+  .about-us__placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(92, 42, 30, 0.05);
+    display: block;
+    aspect-ratio: 4/5;
+  }
+
+  /* --- CONTEÚDO --- */
+  .about-us__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .about-us__subtitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-whisky, #a9673c);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .about-us__title {
+    font-size: clamp(2rem, 5vw, 3.2rem); /* Tipografia responsiva avançada */
+    font-weight: 700;
+    color: var(--color-pinhao, #5c2a1e);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .about-us__text {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--color-foreground, #5c2a1e);
+    opacity: 0.85;
+    margin-bottom: 2.5rem;
+  }
+  
+  .about-us__text p {
+    margin-top: 0;
+  }
+
+  /* --- BOTÃO (CTA Forte) --- */
+  .about-us__button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background-color: var(--color-pinhao, #5c2a1e);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  }
+
+  .about-us__button:hover {
+    background-color: var(--color-whisky, #a9673c);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(169, 103, 60, 0.3);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sobre a Loja (About Us)",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Cor de fundo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout no Desktop",
+      "options": [
+        {
+          "value": "image_left",
+          "label": "Imagem à esquerda"
+        },
+        {
+          "value": "image_right",
+          "label": "Imagem à direita"
+        }
+      ],
+      "default": "image_left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagem"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Nossa História"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Construindo o futuro do Piseiro"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto (Storytelling)",
+      "default": "<p>Compartilhe os bastidores da sua marca. Fale sobre a qualidade dos seus produtos, a paixão da equipe e a missão que move a sua loja todos os dias. Histórias autênticas geram confiança e transformam visitantes em clientes leais.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão",
+      "default": "Conheça nossos produtos"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sobre a Loja (About Us)",
+      "category": "Texto"
+    }
+  ]
+}
+{% endschema %}

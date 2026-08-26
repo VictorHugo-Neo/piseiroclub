@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {}
+    },
+    "about_us": {
+      "type": "about-us",
+      "settings": {
+        "title": "A Essência do Piseiro",
+        "subtitle": "Nossa História",
+        "text": "<p>Nascemos da paixão pela música e cultura. Aqui você encontra os melhores produtos para aproveitar cada momento.</p>",
+        "button_label": "Ver produtos",
+        "button_link": "shopify:\/\/collections\/all"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "about_us"
+  ]
+}

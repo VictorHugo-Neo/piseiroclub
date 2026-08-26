@@ -1,13 +1,43 @@
 {
   "type": "footer",
-  "name": "t:general.footer",
+  "name": "Footer",
   "sections": {
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
-      }
+        "top_bg_color": "#5C2A1E",
+        "top_text_color": "#ffffff",
+        "top_text": "Siga nosso Instagram e cadastre-se:",
+        "bg_color": "#F9F6F0",
+        "text_color": "#5C2A1E",
+        "show_payment_icons": true,
+        "show_social_icons": true
+      },
+      "blocks": {
+        "brand_block": {
+          "type": "brand",
+          "settings": {
+            "text": "<p><strong>Horário de Atendimento:</strong><br/>Segunda a Sexta: 09:00 às 18:00<br/>Sábado: 09:00 às 12:00</p>"
+          }
+        },
+        "links_block": {
+          "type": "link_list",
+          "settings": {
+            "title": "Políticas da Loja"
+          }
+        },
+        "tracking_block": {
+          "type": "tracking",
+          "settings": {
+            "title": "Rastreio e Segurança"
+          }
+        }
+      },
+      "block_order": [
+        "brand_block",
+        "links_block",
+        "tracking_block"
+      ]
     }
   },
   "order": [

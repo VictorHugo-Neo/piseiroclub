@@ -1,8 +1,8 @@
-<header class="header">
-  <!-- Checkbox hack para Drawer CSS puro (Regra 1: Simplicidade, sem JS complexo) -->
+<header class="header {% if section.settings.enable_sticky_header %}header--sticky{% endif %}">
+  <!-- Regra 1: Simplicidade - Checkbox hack para Drawer CSS puro (sem scripts pesados) -->
   <input type="checkbox" id="MobileMenuToggle" class="mobile-menu-checkbox" aria-hidden="true">
   
-  <!-- Regra 9 (Fitts): Ícone de Hambúrguer com no mínimo 48x48px de área clicável -->
+  <!-- Ícone Hambúrguer (Mobile) -->
   <label for="MobileMenuToggle" class="header__hamburger" aria-label="Abrir menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -16,8 +16,7 @@
     <label for="MobileMenuToggle" class="mobile-drawer__overlay" aria-label="Fechar menu"></label>
     <div class="mobile-drawer__content">
       <div class="mobile-drawer__header">
-        <span class="mobile-drawer__title">{{ shop.name }}</span>
-        <!-- Regra 9 (Fitts): Botão de Fechar 48x48px -->
+        <span class="mobile-drawer__title">Menu</span>
         <label for="MobileMenuToggle" class="mobile-drawer__close" aria-label="Fechar menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -27,37 +26,78 @@
       </div>
       <nav class="mobile-drawer__nav">
         {%- if section.settings.menu != blank -%}
-          {%- for link in section.settings.menu.links -%}
-            <!-- Regra 9 (Fitts): Links altos com preenchimento para facilitar toque -->
-            <a href="{{ link.url }}" class="mobile-drawer__link">{{ link.title }}</a>
-          {%- endfor -%}
-        {%- else -%}
-          <a href="{{ routes.all_products_collection_url }}" class="mobile-drawer__link">Calçados</a>
-          <a href="{{ routes.all_products_collection_url }}" class="mobile-drawer__link">Acessórios</a>
+          <ul class="mobile-drawer__list">
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                {%- if link.links != blank -%}
+                  <details class="mobile-drawer__details">
+                    <summary class="mobile-drawer__summary">
+                      {{ link.title }}
+                      <svg viewBox="0 0 24 24" class="icon-caret" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <ul class="mobile-drawer__sublist">
+                      {%- for childlink in link.links -%}
+                        <li>
+                          <a href="{{ childlink.url }}" class="mobile-drawer__sublink">{{ childlink.title }}</a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                {%- else -%}
+                  <a href="{{ link.url }}" class="mobile-drawer__link">{{ link.title }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
         {%- endif -%}
       </nav>
     </div>
   </div>
 
-  <!-- Regra 6: Padrão Z - Logotipo -->
+  <!-- Logotipo da Loja -->
   <a href="{{ routes.root_url }}" class="header__logo">
-    {{ shop.name }}
+    {%- if section.settings.logo != blank -%}
+      <img src="{{ section.settings.logo | image_url: width: 600 }}"
+           alt="{{ shop.name }}"
+           class="header__logo-image"
+           width="{{ section.settings.logo_width }}"
+           height="auto"
+           loading="eager">
+    {%- else -%}
+      <span class="header__logo-text">{{ shop.name }}</span>
+    {%- endif -%}
   </a>
 
-  <!-- Regra 6 e 8: Menu centralizado e simplificado Desktop -->
+  <!-- Menu Central (Desktop) -->
   <nav class="header__menu" aria-label="Menu Principal">
     {%- if section.settings.menu != blank -%}
-      {%- for link in section.settings.menu.links -%}
-        <a href="{{ link.url }}" class="header__menu-item">{{ link.title }}</a>
-      {%- endfor -%}
-    {%- else -%}
-      <!-- Fallback -->
-      <a href="{{ routes.all_products_collection_url }}" class="header__menu-item">Calçados</a>
-      <a href="{{ routes.all_products_collection_url }}" class="header__menu-item">Acessórios</a>
+      <ul class="header__menu-list">
+        {%- for link in section.settings.menu.links -%}
+          {%- if link.links != blank -%}
+            <li class="header__menu-item header__menu-item--has-dropdown">
+              <a href="{{ link.url }}" class="header__menu-link">
+                {{ link.title }}
+                <svg viewBox="0 0 24 24" class="icon-caret" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </a>
+              <ul class="header__dropdown">
+                {%- for childlink in link.links -%}
+                  <li>
+                    <a href="{{ childlink.url }}" class="header__dropdown-link">{{ childlink.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- else -%}
+            <li class="header__menu-item">
+              <a href="{{ link.url }}" class="header__menu-link">{{ link.title }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
     {%- endif -%}
   </nav>
 
-  <!-- Regra 6: Padrão Z - Ícones utilitários à direita -->
+  <!-- Ícones Utilitários (Busca, Conta, Carrinho) -->
   <div class="header__icons">
     <a href="{{ routes.search_url }}" class="header__icon" aria-label="Buscar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,160 +108,263 @@
 
     {%- if shop.customer_accounts_enabled -%}
       <a href="{{ routes.account_url }}" class="header__icon" aria-label="Minha Conta">
-        {%- if 'icon-account.svg' != blank -%}
-          {{ 'icon-account.svg' | inline_asset_content }}
-        {%- else -%}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        {%- endif -%}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
       </a>
     {%- endif -%}
 
-    <a href="{{ routes.cart_url }}" class="header__icon" aria-label="Carrinho">
-      {{ 'icon-cart.svg' | inline_asset_content }}
+    <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart" aria-label="Carrinho">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
       {%- if cart.item_count > 0 -%}
-        <sup class="header__cart-count">{{ cart.item_count }}</sup>
+        <span class="header__cart-count">{{ cart.item_count }}</span>
       {%- endif -%}
     </a>
   </div>
 </header>
 
+{% style %}
+  /* Variáveis de largura do Logo passadas do Schema para o CSS */
+  .header__logo-image {
+    max-width: {{ section.settings.logo_width_mobile }}px;
+  }
+  @media screen and (min-width: 768px) {
+    .header__logo-image {
+      max-width: {{ section.settings.logo_width }}px;
+    }
+  }
+{% endstyle %}
+
 {% stylesheet %}
   .header {
-    background-color: var(--color-background, #f9f6f0);
-    box-shadow: 0 4px 15px rgba(92, 42, 30, 0.06);
-    height: 5rem;
-    padding: 0 var(--page-margin, 64px);
+    background-color: var(--color-background, #F9F6F0);
+    box-shadow: 0 4px 15px rgba(92, 42, 30, 0.05);
+    height: 5.5rem;
+    padding: 0 2rem;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 100;
   }
+  
+  .header--sticky {
+    position: sticky;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
 
+  /* --- LOGO --- */
   .header__logo {
     justify-self: start;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .header__logo-text {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-pinhao, #5c2a1e);
-    text-decoration: none;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
 
-  /* Hamburger logic hidden on desktop */
-  .mobile-menu-checkbox,
-  .header__hamburger,
-  .mobile-drawer {
-    display: none;
-  }
-
+  /* --- MENU DESKTOP --- */
   .header__menu {
     justify-self: center;
-    display: flex;
-    gap: 2.5rem;
   }
 
+  .header__menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  
   .header__menu-item {
+    position: relative;
+  }
+  
+  .header__menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     text-decoration: none;
     color: var(--color-foreground, #5c2a1e);
     font-weight: 500;
     font-size: 0.95rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
+    padding: 0.75rem 0;
     transition: color 0.2s ease, opacity 0.2s ease;
   }
-
-  .header__menu-item:hover {
-    opacity: 0.7;
+  
+  .header__menu-link:hover {
     color: var(--color-whisky, #a9673c);
   }
+  
+  .icon-caret {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Dropdown Inteligente */
+  .header__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(15px);
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+    min-width: 240px;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), visibility 0.3s;
+    z-index: 10;
+  }
+  
+  /* Ponte visual invisível para o mouse não perder o hover ao descer */
+  .header__dropdown::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+  }
 
+  .header__menu-item:hover .header__dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .header__menu-item:hover .icon-caret {
+    transform: rotate(180deg);
+  }
+  
+  .header__dropdown-link {
+    display: block;
+    padding: 0.65rem 1.5rem;
+    text-decoration: none;
+    color: var(--color-foreground, #5c2a1e);
+    font-weight: 400;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+  }
+  
+  .header__dropdown-link:hover {
+    background-color: rgba(92, 42, 30, 0.04);
+    color: var(--color-whisky, #a9673c);
+    padding-left: 1.75rem; /* Micro-interação visual profissional */
+  }
+
+  /* --- ÍCONES --- */
   .header__icons {
     justify-self: end;
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: center;
   }
 
-  /* Regra 9: Fitts Law aplicada nos ícones desktop também */
   .header__icon {
     text-decoration: none;
     color: var(--color-foreground, #5c2a1e);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    min-height: 48px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
     position: relative;
-    transition: opacity 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   
   .header__icon:hover {
-    opacity: 0.7;
+    background-color: rgba(92, 42, 30, 0.05);
     color: var(--color-whisky, #a9673c);
   }
 
   .header__icon svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 22px;
+    height: 22px;
+  }
+
+  .header__icon--cart {
+    position: relative;
   }
 
   .header__cart-count {
     position: absolute;
-    top: 0.2rem;
-    right: 0.2rem;
-    background-color: var(--color-whisky, #a9673c);
+    top: 4px;
+    right: 2px;
+    background-color: #28a745;
     color: #fff;
     font-size: 0.7rem;
-    line-height: 1;
-    padding: 0.2rem 0.4rem;
-    border-radius: 2rem;
-    font-weight: 700;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--color-background, #F9F6F0);
   }
 
-  /* --- MOBILE CSS (< 768px) --- */
+  /* --- HACKS E MOBILE (< 768px) --- */
+  .mobile-menu-checkbox,
+  .header__hamburger,
+  .mobile-drawer {
+    display: none;
+  }
+
   @media screen and (max-width: 768px) {
     .header {
-      padding: 0 1.5rem;
-      /* Grid altera: Hambúrguer(Esquerda) - Logo(Centro) - Ícones(Direita) */
+      padding: 0 1.25rem;
+      /* Hamburger(Esq) | Logo(Centro) | Ícones(Dir) */
       grid-template-columns: 1fr auto 1fr;
+      height: 4.5rem;
     }
     
-    .header__menu {
-      display: none;
-    }
+    .header__menu { display: none; }
+    
+    .header__logo { justify-self: center; }
 
-    .header__logo {
-      justify-self: center; /* Centraliza logo no mobile */
-    }
-
-    /* Regra 9: O botão hambúrguer é fácil de clicar com 48x48 */
     .header__hamburger {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      min-width: 48px;
-      min-height: 48px;
+      width: 48px;
+      height: 48px;
       cursor: pointer;
       color: var(--color-pinhao, #5c2a1e);
+      margin-left: -8px;
     }
 
-    .header__hamburger svg {
-      width: 28px;
-      height: 28px;
-    }
+    .header__hamburger svg { width: 28px; height: 28px; }
 
-    /* Lógica do Drawer com Checkbox (Regra 1: Simplicidade sem JS) */
+    /* Lógica do Drawer com Checkbox */
     .mobile-drawer {
       display: block;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       z-index: 999;
       pointer-events: none;
       visibility: hidden;
@@ -229,11 +372,10 @@
 
     .mobile-drawer__overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px); /* Toque premium no mobile */
       opacity: 0;
       transition: opacity 0.3s ease;
       cursor: pointer;
@@ -241,101 +383,158 @@
 
     .mobile-drawer__content {
       position: absolute;
-      top: 0;
-      left: -100%;
+      top: 0; left: -100%;
       width: 85%;
       max-width: 320px;
       height: 100%;
       background-color: var(--color-background, #f9f6f0);
       box-shadow: 2px 0 15px rgba(0,0,0,0.1);
-      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
       display: flex;
       flex-direction: column;
       pointer-events: auto;
+      overflow-y: auto;
     }
 
-    /* Gatilho visual ao marcar o checkbox */
+    /* Gatilhos ao clicar no Hamburger */
     .mobile-menu-checkbox:checked ~ .mobile-drawer {
       visibility: visible;
       pointer-events: auto;
     }
-    
     .mobile-menu-checkbox:checked ~ .mobile-drawer .mobile-drawer__overlay {
       opacity: 1;
     }
-
     .mobile-menu-checkbox:checked ~ .mobile-drawer .mobile-drawer__content {
       left: 0;
     }
 
-    /* Header interno da gaveta */
+    /* Header do Menu Lateral */
     .mobile-drawer__header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 1.5rem;
       border-bottom: 1px solid rgba(92, 42, 30, 0.1);
+      position: sticky;
+      top: 0;
+      background-color: var(--color-background, #f9f6f0);
+      z-index: 2;
     }
 
     .mobile-drawer__title {
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--color-pinhao, #5c2a1e);
     }
 
-    /* Regra 9: Botão de fechar grande (Fitts) */
     .mobile-drawer__close {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 48px;
-      min-height: 48px;
+      width: 44px;
+      height: 44px;
       cursor: pointer;
+      background: rgba(92, 42, 30, 0.05);
+      border-radius: 50%;
+      margin-right: -8px;
       color: var(--color-pinhao, #5c2a1e);
-      margin-right: -12px; /* Ajuste visual mantendo área de clique alta */
+    }
+    
+    .mobile-drawer__close svg { width: 24px; height: 24px; }
+
+    /* Navegação Mobile (Accordions) */
+    .mobile-drawer__list {
+      list-style: none;
+      padding: 0; margin: 0;
     }
 
-    .mobile-drawer__close svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    /* Regra 9: Links do Menu com enorme área de clique vertical */
-    .mobile-drawer__nav {
+    .mobile-drawer__link,
+    .mobile-drawer__summary {
       display: flex;
-      flex-direction: column;
-      padding: 1rem 0;
-      overflow-y: auto;
-    }
-
-    .mobile-drawer__link {
-      display: flex;
+      justify-content: space-between;
       align-items: center;
-      min-height: 60px; /* Acima dos 48px exigidos pela Lei de Fitts */
-      padding: 0 1.5rem;
-      font-size: 1.15rem;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--color-pinhao, #5c2a1e);
       text-decoration: none;
       border-bottom: 1px solid rgba(92, 42, 30, 0.05);
-      transition: background-color 0.2s ease;
+      cursor: pointer;
+      list-style: none;
+    }
+    
+    .mobile-drawer__summary::-webkit-details-marker { display: none; }
+    
+    .mobile-drawer__details[open] .icon-caret {
+      transform: rotate(180deg);
     }
 
-    .mobile-drawer__link:active {
-      background-color: rgba(169, 103, 60, 0.1); /* Feedback visual no toque */
+    .mobile-drawer__sublist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      background-color: rgba(92, 42, 30, 0.02);
+      border-bottom: 1px solid rgba(92, 42, 30, 0.05);
+    }
+
+    .mobile-drawer__sublink {
+      display: block;
+      padding: 1rem 1.5rem 1rem 2.5rem; /* Indentado visualmente */
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--color-foreground, #5c2a1e);
+      text-decoration: none;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Cabeçalho Principal",
+  "name": "Cabeçalho Profissional",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logotipo da Loja"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Largura do logo (Desktop)",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Largura do logo (Mobile)",
+      "default": 120
+    },
     {
       "type": "link_list",
       "id": "menu",
       "label": "Menu Principal",
-      "info": "Para alta conversão (Lei de Hick), prefira links diretos como 'Calçados' e 'Acessórios'. Submenus não serão exibidos."
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "default": true,
+      "label": "Ativar cabeçalho fixo (Sticky)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cabeçalho Premium"
     }
   ]
 }
