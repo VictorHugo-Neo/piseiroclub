@@ -47,7 +47,7 @@
 {% stylesheet %}
   /* Regra 7: Espaço em branco generoso (Whitespace) */
   .about-us {
-    padding: 6rem 0;
+    padding: 2rem 0;
   }
 
   .about-us .container {
@@ -83,7 +83,7 @@
   /* --- IMAGEM --- */
   .about-us__image-wrapper {
     position: relative;
-    border-radius: 8px;
+    border-radius: 0;
     overflow: hidden;
     /* Sombra elegante e quente baseada na cor Pinhão */
     box-shadow: 0 15px 35px rgba(92, 42, 30, 0.1); 
@@ -122,7 +122,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: var(--color-whisky, #a9673c);
+    color: var(--color-whisky, #A67C52);
     margin-bottom: 1rem;
     display: block;
   }
@@ -130,7 +130,7 @@
   .about-us__title {
     font-size: clamp(2rem, 5vw, 3.2rem); /* Tipografia responsiva avançada */
     font-weight: 700;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0 0 1.5rem 0;
     line-height: 1.15;
     letter-spacing: -0.02em;
@@ -139,7 +139,7 @@
   .about-us__text {
     font-size: 1.15rem;
     line-height: 1.8;
-    color: var(--color-foreground, #5c2a1e);
+    color: var(--color-foreground, #5C3D2E);
     opacity: 0.85;
     margin-bottom: 2.5rem;
   }
@@ -152,19 +152,19 @@
   .about-us__button {
     display: inline-block;
     padding: 1rem 2.5rem;
-    background-color: var(--color-pinhao, #5c2a1e);
+    background-color: var(--color-pinhao, #5C3D2E);
     color: #ffffff;
     font-weight: 600;
     font-size: 1.05rem;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-radius: 4px;
+    border-radius: 0;
     transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   }
 
   .about-us__button:hover {
-    background-color: var(--color-whisky, #a9673c);
+    background-color: var(--color-whisky, #A67C52);
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(169, 103, 60, 0.3);
   }

@@ -5,11 +5,9 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "top_bg_color": "#5C2A1E",
-        "top_text_color": "#ffffff",
-        "top_text": "Siga nosso Instagram e cadastre-se:",
-        "bg_color": "#F9F6F0",
-        "text_color": "#5C2A1E",
+        "bg_color": "#111111",
+        "text_color": "#ffffff",
+        "top_text": "Junte-se à Nossa Lista VIP",
         "show_payment_icons": true,
         "show_social_icons": true
       },
@@ -17,26 +15,33 @@
         "brand_block": {
           "type": "brand",
           "settings": {
-            "text": "<p><strong>Horário de Atendimento:</strong><br/>Segunda a Sexta: 09:00 às 18:00<br/>Sábado: 09:00 às 12:00</p>"
+            "text": "<p>Somos especialistas em calçados feitos sob medida para a sua dança. Conforto, estabilidade e elegância para você brilhar no forró.</p><p><strong>Atendimento:</strong><br/>Seg a Sex: 09h às 18h</p>"
           }
         },
-        "links_block": {
+        "links_block_1": {
           "type": "link_list",
           "settings": {
-            "title": "Políticas da Loja"
+            "title": "Categorias"
           }
         },
-        "tracking_block": {
-          "type": "tracking",
+        "links_block_2": {
+          "type": "link_list",
           "settings": {
-            "title": "Rastreio e Segurança"
+            "title": "Ajuda e Suporte"
+          }
+        },
+        "guarantees_block": {
+          "type": "guarantees",
+          "settings": {
+            "title": "Por que comprar conosco?"
           }
         }
       },
       "block_order": [
         "brand_block",
-        "links_block",
-        "tracking_block"
+        "links_block_1",
+        "links_block_2",
+        "guarantees_block"
       ]
     }
   },

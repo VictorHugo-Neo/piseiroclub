@@ -18,7 +18,6 @@
           <div class="product-card__info">
             <h3 class="product-card__title">{{ product_item.title }}</h3>
             <span class="product-card__price">{{ product_item.price | money }}</span>
-            <span class="product-card__btn">Comprar</span>
           </div>
         </a>
       {%- endfor -%}
@@ -32,7 +31,6 @@
           <div class="product-card__info">
             <h3 class="product-card__title">Acessório de Forró</h3>
             <span class="product-card__price">{{ 4990 | money }}</span>
-            <span class="product-card__btn">Comprar</span>
           </div>
         </div>
       {%- endfor -%}
@@ -43,14 +41,14 @@
 {% stylesheet %}
   .related-products-section {
     max-width: var(--page-width, 1200px);
-    margin: 4rem auto;
+    margin: 2rem auto;
     padding: 0 var(--page-margin, 64px);
   }
 
   .related-products__title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin-bottom: 2rem;
     text-align: center;
   }
@@ -62,41 +60,36 @@
     gap: 2rem;
   }
 
-  /* Regra 11: Lei da Proximidade (Gestalt)
-     O card cria um limite invisível que força o cérebro a associar todos os elementos internos. */
+  /* Estilo Thursday Boots: Clean, sem box-shadow, foco na imagem */
   .product-card {
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    background-color: var(--color-background, #f9f6f0);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background-color: transparent;
+    transition: opacity 0.25s ease;
   }
 
   .product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(92, 42, 30, 0.1);
+    opacity: 0.9;
   }
 
   .product-card__image-wrapper {
     width: 100%;
     aspect-ratio: 4 / 5;
     overflow: hidden;
-    background-color: #eaeaea;
+    background-color: #f1efe9;
   }
 
   .product-card__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
   }
   
   .product-card:hover .product-card__image {
-    transform: scale(1.05); /* Leve zoom ao focar */
+    transform: scale(1.03); /* Leve zoom ao focar */
   }
 
   .placeholder-svg {
@@ -107,40 +100,27 @@
 
   /* Proximidade dos elementos de conversão */
   .product-card__info {
-    padding: 1.5rem;
+    padding: 1rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem; 
+    gap: 0.3rem; 
   }
 
   .product-card__title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-pinhao, #5c2a1e);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
   }
 
   .product-card__price {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #1a7b45;
-  }
-
-  .product-card__btn {
-    margin-top: 0.8rem;
-    background-color: var(--color-whisky, #a9673c);
-    color: #fff;
-    padding: 0.7rem 1.8rem;
-    border-radius: 25px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    width: 100%;
-    text-align: center;
+    color: var(--color-pinhao, #5C3D2E);
   }
 
   /* Mobile: Carrossel Horizontal (CSS Scroll Snap) */

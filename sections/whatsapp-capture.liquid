@@ -27,14 +27,14 @@
   .whatsapp-banner {
     /* Regra 7: Espaço em branco mantendo o banner respirável */
     max-width: var(--page-width, 1200px);
-    margin: 4rem auto;
+    margin: 2rem auto;
     padding: 0 var(--page-margin, 64px);
   }
 
   .whatsapp-banner__container {
-    background-color: var(--color-background, #f9f6f0);
+    background-color: var(--color-background, #F9F8F6);
     border: 2px solid #25D366; /* Moldura verde marcante do App */
-    border-radius: 16px;
+    border-radius: 0;
     padding: 3rem 4rem;
     display: flex;
     flex-direction: row;
@@ -51,7 +51,7 @@
   .whatsapp-banner__title {
     font-size: clamp(1.8rem, 3vw, 2.2rem);
     font-weight: 800;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0 0 0.5rem 0;
     line-height: 1.2;
   }
@@ -76,7 +76,7 @@
     text-decoration: none;
     letter-spacing: 0.05em;
     padding: 1.2rem 2.5rem;
-    border-radius: 40px; /* Lei de Fitts: Botão Pílula Gigante */
+    border-radius: 0; /* Lei de Fitts: Botão Pílula Gigante */
     box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
     transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     white-space: nowrap;

@@ -1,0 +1,74 @@
+{% doc %}
+  Renders an elegant, minimalist countdown timer.
+{% enddoc %}
+
+<div class="countdown-premium">
+  <div class="countdown-header">Condição Especial de Frete Grátis expira em:</div>
+  <div class="countdown-timer-minimal">
+    <span id="cd-hours" class="cd-number">04</span><span class="cd-label">h</span>
+    <span class="cd-sep"></span>
+    <span id="cd-minutes" class="cd-number">12</span><span class="cd-label">m</span>
+    <span class="cd-sep"></span>
+    <span id="cd-seconds" class="cd-number">35</span><span class="cd-label">s</span>
+  </div>
+</div>
+
+{% stylesheet %}
+  .countdown-premium {
+    margin-top: 10px;
+    padding: 12px 15px;
+    background-color: #f7f3ed;
+    border: 1px solid rgba(166, 124, 82, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .countdown-header {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #777;
+  }
+  .countdown-timer-minimal {
+    display: flex;
+    align-items: baseline;
+    color: #333;
+  }
+  .cd-number {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  .cd-label {
+    font-size: 0.75rem;
+    color: #999;
+    margin-left: 2px;
+    margin-right: 8px;
+    text-transform: uppercase;
+  }
+  .cd-sep {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    let hours = 4; let minutes = Math.floor(Math.random() * 59); let seconds = Math.floor(Math.random() * 59);
+    const hEl = document.getElementById('cd-hours'), mEl = document.getElementById('cd-minutes'), sEl = document.getElementById('cd-seconds');
+    if (!hEl) return;
+    function updateDisplay() {
+      hEl.textContent = hours.toString().padStart(2, '0');
+      mEl.textContent = minutes.toString().padStart(2, '0');
+      sEl.textContent = seconds.toString().padStart(2, '0');
+    }
+    const interval = setInterval(() => {
+      seconds--;
+      if (seconds < 0) { seconds = 59; minutes--;
+        if (minutes < 0) { minutes = 59; hours--;
+          if (hours < 0) { clearInterval(interval); hours = 0; minutes = 0; seconds = 0; }
+        }
+      }
+      updateDisplay();
+    }, 1000);
+    updateDisplay();
+  });
+{% endjavascript %}

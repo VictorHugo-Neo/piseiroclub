@@ -1,0 +1,56 @@
+{% doc %}
+  Renders an elegant, premium scarcity indicator.
+{% enddoc %}
+
+<div class="scarcity-premium-container">
+  <div class="scarcity-text">
+    Últimos pares disponíveis: <span id="random-stock" class="stock-number">3</span> em estoque
+  </div>
+  <div class="scarcity-progress-thin">
+    <div class="scarcity-progress-fill"></div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .scarcity-premium-container {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+  .scarcity-text {
+    color: var(--color-pinhao, #5C3D2E);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+  }
+  .stock-number {
+    font-weight: 700;
+    color: #b00020; /* Vermelho escuro elegante para urgência */
+    margin: 0 4px;
+  }
+  .scarcity-progress-thin {
+    height: 2px;
+    background: #eaeaea;
+    width: 100%;
+    max-width: 250px;
+    overflow: hidden;
+  }
+  .scarcity-progress-fill {
+    height: 100%;
+    width: 12%; /* Baixo estoque */
+    background: #b00020;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const stockEl = document.getElementById('random-stock');
+    if (stockEl) {
+      const randomStock = Math.floor(Math.random() * 6) + 2;
+      stockEl.textContent = randomStock;
+    }
+  });
+{% endjavascript %}

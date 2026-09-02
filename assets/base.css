@@ -27,12 +27,16 @@ body {
   min-width: 320px;
   overflow-x: hidden;
   
-  font-family: var(--font-primary, sans-serif);
-  color: var(--color-pinhao, #5c2a1e);
-  background-color: var(--color-background, #f9f6f0);
+  font-family: var(--font-body, var(--font-primary--family, sans-serif));
+  color: var(--color-foreground, #5C3D2E);
+  background-color: var(--color-background, #F9F8F6);
 }
 
 /* 2. Tipografia Fluida (Evitando 'px' fixos) */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading, serif);
+}
+
 /* O clamp(min, preferencial, max) garante que as fontes se ajustem ao tamanho da janela suavemente */
 
 h1, .h1 {

@@ -73,18 +73,37 @@ p:empty {
 
 /** Theme styles below */
 :root {
-  /* Estilo rústico e terroso */
-  --color-pinhao: #5c2a1e;
-  --color-whisky: #a9673c;
-  --color-background: #f9f6f0;
-  --color-foreground: var(--color-pinhao);
+  /* Cores - Country Elegance */
+  --color-primary: #5C3D2E;
+  --color-secondary: #A67C52;
+  --color-background: #F9F8F6;
+  --color-surface: #FFFFFF;
+  --color-text: #2D2422;
+  --color-text-light: #6D6461;
+
+  /* Compatibilidade com as variáveis anteriores das seções */
+  --color-pinhao: var(--color-primary);
+  --color-whisky: var(--color-secondary);
+  --color-foreground: var(--color-text);
+
+  /* Fontes - Country Elegance */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-primary--family: var(--font-body);
   
   /* Regra 4: Layout baseado em grade - Largura máxima e centralização */
   --page-width: 1200px;
   
-  /* Regra 7: Espaço em Branco - Margens globais generosas para o layout respirar */
-  --page-margin: 64px;
-  --section-padding: 80px 0;
+  /* Regra 7: Espaço em Branco - Margens globais mais enxutas para evitar espaços vazios */
+  --page-margin: 16px;
+  --section-padding: 24px 0;
+}
+
+@media screen and (min-width: 768px) {
+  :root {
+    --page-margin: 40px;
+    --section-padding: 40px 0;
+  }
 }
 
 body {

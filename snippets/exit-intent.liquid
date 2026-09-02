@@ -1,0 +1,81 @@
+{% doc %}
+  Renders a premium exit-intent popup.
+{% enddoc %}
+
+<div id="exit-intent-overlay" class="exit-intent-premium">
+  <div class="exit-intent-content-p">
+    <div class="exit-header-p">
+      <h2>Antes de ir...</h2>
+      <p>Gostaríamos de lhe oferecer um presente especial. Utilize o código <strong>LUXO15</strong> para 15% de cortesia em seu pedido.</p>
+    </div>
+    
+    <div class="exit-actions-p">
+      <button class="btn-buy-p" id="claim-discount">Aplicar Cortesia</button>
+      <button id="decline-discount" class="decline-link-p">Continuar navegando</button>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .exit-intent-premium {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+  }
+  .exit-intent-premium.active { opacity: 1; pointer-events: auto; }
+  
+  .exit-intent-content-p {
+    background: #fff; padding: 50px 40px; width: 90%; max-width: 450px;
+    text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  }
+  .exit-header-p h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.15em; color: #111; margin-top: 0; margin-bottom: 20px; font-weight: 400;}
+  .exit-header-p p { font-size: 0.95rem; color: #666; margin-bottom: 40px; line-height: 1.6; font-weight: 300;}
+  
+  .exit-actions-p { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+  
+  .btn-buy-p {
+    background: #111; color: #fff; border: 1px solid #111;
+    padding: 18px 40px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em;
+    cursor: pointer; transition: all 0.3s ease; width: 100%;
+  }
+  .btn-buy-p:hover { background: transparent; color: #111; }
+
+  .decline-link-p {
+    background: none; border: none; color: #999; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: color 0.3s;
+    padding: 10px;
+  }
+  .decline-link-p:hover { color: #111; }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const overlay = document.getElementById('exit-intent-overlay');
+    const claimBtn = document.getElementById('claim-discount');
+    const declineBtn = document.getElementById('decline-discount');
+    let triggered = false;
+
+    if (!overlay) return;
+
+    document.addEventListener('mouseout', function(e) {
+      if (e.clientY < 50 && !triggered) { triggered = true; overlay.classList.add('active'); }
+    });
+
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', function() {
+      if(window.scrollY < lastScrollY - 100 && !triggered && window.innerWidth < 768) {
+        triggered = true; overlay.classList.add('active');
+      }
+      lastScrollY = window.scrollY;
+    });
+
+    if(declineBtn) declineBtn.addEventListener('click', (e) => { e.preventDefault(); overlay.classList.remove('active'); });
+    if(claimBtn) claimBtn.addEventListener('click', () => {
+      alert('Cortesia LUXO15 aplicada à sua sacola.');
+      overlay.classList.remove('active');
+      const drawer = document.getElementById('cart-drawer');
+      if(drawer) drawer.classList.add('active');
+    });
+  });
+{% endjavascript %}

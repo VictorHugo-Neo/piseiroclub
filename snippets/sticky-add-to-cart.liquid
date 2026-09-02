@@ -1,0 +1,62 @@
+{% doc %}
+  Renders a sleek, premium sticky add to cart button.
+{% enddoc %}
+
+<div class="sticky-atc-premium" id="sticky-atc">
+  <div class="sticky-atc-content-p">
+    <div class="sticky-product-info-p">
+      <span class="sticky-title-p">{{ product.title | truncate: 35 }}</span>
+      <span class="sticky-price-p">{{ product.price | money }}</span>
+    </div>
+    <button type="button" class="btn-buy sticky-btn-p" onclick="document.querySelector('.product-form form').dispatchEvent(new Event('submit', {cancelable: true, bubbles: true})); document.querySelector('.product-form form button[type=submit]').click();">
+      Adicionar à Sacola
+    </button>
+  </div>
+</div>
+
+{% stylesheet %}
+  .sticky-atc-premium {
+    position: fixed; bottom: -100px; left: 0; width: 100%;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    z-index: 999; transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    padding: 15px 0;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.02);
+  }
+  .sticky-atc-premium.visible { bottom: 0; }
+  
+  .sticky-atc-content-p {
+    max-width: var(--page-width, 1200px); margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 var(--page-margin, 64px);
+  }
+  .sticky-product-info-p { display: flex; align-items: center; gap: 20px; }
+  .sticky-title-p { font-weight: 300; font-size: 0.95rem; color: #333; text-transform: uppercase; letter-spacing: 0.05em;}
+  .sticky-price-p { color: #111; font-weight: 500; font-size: 1.1rem; }
+  
+  .sticky-btn-p {
+    min-height: 45px !important; font-size: 0.85rem !important;
+    padding: 0 40px; margin: 0; width: auto !important;
+    background: #111; color: #fff; border: 1px solid #111;
+    text-transform: uppercase; letter-spacing: 0.15em; transition: all 0.3s;
+  }
+  .sticky-btn-p:hover { background: transparent; color: #111; }
+
+  @media (max-width: 768px) {
+    .sticky-atc-content-p { padding: 0 20px; }
+    .sticky-product-info-p { display: none; }
+    .sticky-btn-p { width: 100% !important; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const stickyAtc = document.getElementById('sticky-atc');
+    const mainBtn = document.querySelector('.product-form form button[type=submit]');
+    if (!stickyAtc || !mainBtn) return;
+    window.addEventListener('scroll', function() {
+      if (mainBtn.getBoundingClientRect().bottom < 0) { stickyAtc.classList.add('visible'); } 
+      else { stickyAtc.classList.remove('visible'); }
+    });
+  });
+{% endjavascript %}

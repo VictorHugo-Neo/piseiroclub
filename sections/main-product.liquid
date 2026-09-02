@@ -30,6 +30,9 @@
 
     <!-- Regra 2: Razão Áurea (~38.2%) - Informações -->
     <div class="product-details">
+      <!-- Escassez Premium -->
+      {% render 'scarcity-stock' %}
+      
       <h1 class="product-title">{{ product.title }}</h1>
       
       <!-- Hierarquia de Preços -->
@@ -44,6 +47,9 @@
           <span class="product-price--original">De: <s>{{ product.compare_at_price | money }}</s></span>
         {% endif %}
       </div>
+      
+      <!-- FOMO Premium: Coração / Carrinho -->
+      {% render 'live-views' %}
 
       <!-- Descrição Técnica em Lista para Escaneabilidade (Padrão F) -->
       <div class="product-description-tech">
@@ -62,31 +68,51 @@
       <!-- Formulário de Compra -->
       <div class="product-form">
         {% form 'product', product %}
-          <!-- Variantes / Tamanhos -->
+          <!-- Variantes / Tamanhos (Pills) -->
           <div class="product-form__variants">
-            <label for="variant-select">Selecione o Tamanho:</label>
-            <select name="id" id="variant-select">
+            <div class="product-form__variants-header">
+              <label>Selecione o Tamanho</label>
+              <button type="button" class="btn-size-guide" onclick="alert('Guia de Tamanhos abriria aqui.')">Guia de Tamanhos</button>
+            </div>
+            
+            <div class="variant-pills">
               {% for variant in product.variants %}
-                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
-                  {{ variant.title }} {% unless variant.available %} - Esgotado{% endunless %}
-                </option>
+                <input type="radio" 
+                       id="variant-{{ variant.id }}" 
+                       name="id" 
+                       value="{{ variant.id }}" 
+                       {% if variant == product.selected_or_first_available_variant %}checked{% endif %}
+                       {% unless variant.available %}disabled{% endunless %}
+                       class="variant-pill__input">
+                <label for="variant-{{ variant.id }}" class="variant-pill__label">
+                  {{ variant.title }}
+                </label>
               {% endfor %}
-            </select>
+            </div>
           </div>
+          
+          <!-- Countdown Premium -->
+          {% render 'countdown-timer' %}
 
           <!-- Regra 9: Lei de Fitts (Botão Gigante Próximo ao Seletor) -->
-          <button type="submit" name="add" class="btn-buy" {% unless product.available %}disabled{% endunless %}>
+          <button type="submit" name="add" class="btn-buy" {% unless product.available %}disabled{% endunless %} style="margin-top: 15px;">
             {% if product.available %}
               Comprar Agora
             {% else %}
               Esgotado
             {% endif %}
           </button>
+          
+          <!-- Selos de Confiança -->
+          {% render 'trust-badges' %}
         {% endform %}
       </div>
     </div>
   </div>
 </div>
+
+<!-- Sticky Add To Cart -->
+{% render 'sticky-add-to-cart' %}
 
 {% stylesheet %}
   .product-main {
@@ -104,7 +130,7 @@
     margin-bottom: 1rem;
   }
   .breadcrumb a {
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     text-decoration: none;
     font-weight: 500;
   }
@@ -149,7 +175,7 @@
   .product-gallery__item img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 0;
     object-fit: cover;
   }
 
@@ -162,141 +188,193 @@
   .product-title {
     font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: 700;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0;
     line-height: 1.1;
   }
 
-  /* Hierarquia Visual Forte nos Preços */
+  /* Hierarquia Visual Elegante nos Preços */
   .product-pricing {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    background-color: #f2f7f4;
-    padding: 1.5rem;
-    border-radius: 12px;
-    border-left: 5px solid #1a7b45;
+    padding: 0;
+    margin: 1rem 0;
   }
   .product-price--pix {
-    font-size: clamp(2rem, 3vw, 2.8rem);
-    font-weight: 800;
-    color: #1a7b45; /* Verde vibrante para destacar a melhor oferta */
+    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+    font-weight: 400; /* Menos peso, mais elegância */
+    color: var(--color-pinhao, #5C3D2E);
     display: flex;
     align-items: baseline;
     gap: 0.8rem;
     line-height: 1;
   }
   .pix-label {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1a7b45;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   .product-price--installments {
-    font-size: 1.2rem;
-    color: #333;
-    font-weight: 500;
+    font-size: 1rem;
+    color: #666;
+    font-weight: 300;
   }
   .product-price--original {
-    font-size: 1rem;
-    color: #777;
-    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 0.2rem;
   }
 
   /* Especificações e Descrição */
   .product-description-tech h3 {
-    font-size: 1.2rem;
-    color: var(--color-pinhao, #5c2a1e);
-    margin-bottom: 1rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
   }
   .product-description-tech ul {
     list-style-type: none;
     padding: 0;
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    margin: 0 0 2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1rem;
   }
   .product-description-tech li {
-    font-size: 1.05rem;
-    line-height: 1.4;
-    color: #444;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
     position: relative;
-    padding-left: 1.5rem;
+    padding-left: 0;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
   }
   .product-description-tech li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--color-whisky, #a9673c);
-    font-weight: bold;
+    display: none;
   }
   
   .product-description-full {
-    margin-top: 1.5rem;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #555;
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #666;
+    font-weight: 300;
   }
 
-  /* Variantes */
+  /* Variantes Premium */
   .product-form__variants {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem; /* Próximo ao botão de compra (Lei de Fitts) */
+    gap: 0.8rem;
+    margin-bottom: 2rem;
   }
-  .product-form__variants label {
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: var(--color-pinhao, #5c2a1e);
+  .product-form__variants-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
   }
-  .product-form__variants select {
-    padding: 1.2rem;
-    font-size: 1.1rem;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
+  .product-form__variants-header label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #333;
+    margin: 0;
+  }
+  .btn-size-guide {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.85rem;
+    color: var(--color-pinhao, #5C3D2E);
+    text-decoration: underline;
     cursor: pointer;
     font-weight: 500;
   }
-  .product-form__variants select:focus {
-    outline: none;
-    border-color: var(--color-whisky, #a9673c);
+  
+  .variant-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .variant-pill__input {
+    /* Esconde o radio real */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .variant-pill__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    height: 45px;
+    padding: 0 1rem;
+    border: 1px solid #ccc;
+    background-color: transparent;
+    color: #333;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .variant-pill__label:hover {
+    border-color: #333;
+  }
+  
+  .variant-pill__input:checked + .variant-pill__label {
+    background-color: var(--color-pinhao, #5C3D2E);
+    color: #fff;
+    border-color: var(--color-pinhao, #5C3D2E);
+  }
+  
+  .variant-pill__input:disabled + .variant-pill__label {
+    opacity: 0.5;
+    text-decoration: line-through;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
   }
 
-  /* Regra 9: Lei de Fitts - Botão Gigante */
+  /* Botão Elegante */
   .btn-buy {
     width: 100%;
-    min-height: 85px; /* Área de clique enorme */
-    background-color: var(--color-whisky, #a9673c);
+    min-height: 60px;
+    background-color: #111;
     color: #fff;
-    font-size: 1.8rem;
-    font-weight: 800;
+    font-size: 1rem;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: none;
-    border-radius: 12px; /* Cantos arredondados */
+    letter-spacing: 0.15em;
+    border: 1px solid #111;
+    border-radius: 0;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(169, 103, 60, 0.4);
-    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .btn-buy:hover {
-    background-color: #8c532f;
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(169, 103, 60, 0.5);
+    background-color: transparent;
+    color: #111;
   }
   .btn-buy:active {
-    transform: translateY(0);
+    transform: scale(0.99);
   }
   .btn-buy:disabled {
-    background-color: #ccc;
+    background-color: #f5f5f5;
+    border-color: #eee;
+    color: #aaa;
     cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
   }
 {% endstylesheet %}
 

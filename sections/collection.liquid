@@ -1,47 +1,293 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Página de Coleção Premium (Estilo Thursday Boots)
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<div class="collection-page">
+  <!-- Cabeçalho da Coleção -->
+  <header class="collection-header">
+    <h1 class="collection-header__title">{{ collection.title | default: 'Coleção' }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="collection-header__description">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+  <!-- Barra de Ferramentas Mobile -->
+  <div class="collection-toolbar-mobile">
+    <button type="button" class="btn-filter-mobile">Filtros & Ordenação</button>
+  </div>
+
+  <div class="collection-layout">
+    <!-- Sidebar de Filtros -->
+    <aside class="collection-sidebar">
+      <div class="filter-group">
+        <h3 class="filter-group__title">Tamanho</h3>
+        <div class="filter-group__pills">
+          <button class="filter-pill">34</button>
+          <button class="filter-pill">35</button>
+          <button class="filter-pill">36</button>
+          <button class="filter-pill">37</button>
+          <button class="filter-pill">38</button>
+          <button class="filter-pill">39</button>
+          <button class="filter-pill">40</button>
         </div>
       </div>
-    {% endfor %}
+      
+      <div class="filter-group">
+        <h3 class="filter-group__title">Cor</h3>
+        <ul class="filter-group__list">
+          <li><label><input type="checkbox"> Preto</label></li>
+          <li><label><input type="checkbox"> Marrom</label></li>
+          <li><label><input type="checkbox"> Pinhão</label></li>
+          <li><label><input type="checkbox"> Whisky</label></li>
+        </ul>
+      </div>
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+      <div class="filter-group">
+        <h3 class="filter-group__title">Ordenar por</h3>
+        <select class="sort-select">
+          <option>Recomendados</option>
+          <option>Mais Vendidos</option>
+          <option>Menor Preço</option>
+          <option>Maior Preço</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- Grade de Produtos -->
+    <main class="collection-grid">
+      {% paginate collection.products by 12 %}
+        {%- if collection.products.size == 0 -%}
+          <div class="collection-empty">Nenhum produto encontrado nesta coleção.</div>
+        {%- else -%}
+          <div class="products-grid">
+            {% for product_item in collection.products %}
+              <a href="{{ product_item.url }}" class="product-card">
+                <div class="product-card__image-wrapper">
+                  {% if product_item.featured_image %}
+                    {{ product_item.featured_image | image_url: width: 600 | image_tag: class: 'product-card__image', loading: 'lazy' }}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {% endif %}
+                </div>
+                <div class="product-card__info">
+                  <h3 class="product-card__title">{{ product_item.title }}</h3>
+                  <span class="product-card__price">{{ product_item.price | money }}</span>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+          
+          <div class="collection-pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      {% endpaginate %}
+    </main>
+  </div>
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  .collection-page {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 2rem var(--page-margin, 64px);
+  }
+
+  /* Cabeçalho */
+  .collection-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .collection-header__title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: var(--color-pinhao, #5C3D2E);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .collection-header__description {
+    margin-top: 1rem;
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Layout Foco/Sidebar */
+  .collection-layout {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+  .collection-sidebar {
+    flex: 0 0 250px;
+    position: sticky;
+    top: 2rem;
+  }
+  .collection-grid {
+    flex: 1;
+  }
+
+  /* Filtros Premium */
+  .filter-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+  }
+  .filter-group:last-child {
+    border-bottom: none;
+  }
+  .filter-group__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  .filter-group__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .filter-pill {
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-pill:hover, .filter-pill.active {
+    border-color: #333;
+    background-color: #333;
+    color: #fff;
+  }
+  .filter-group__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .filter-group__list label {
+    font-size: 0.95rem;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sort-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    background: transparent;
+    font-size: 0.95rem;
+  }
+
+  /* Grid Estilo Thursday Boots */
+  .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem 1.5rem;
+  }
+  
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background-color: transparent;
+    transition: opacity 0.25s ease;
+  }
+  .product-card:hover {
+    opacity: 0.9;
+  }
+  .product-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background-color: #f1efe9;
+  }
+  .product-card__image, .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .product-card:hover .product-card__image {
+    transform: scale(1.03);
+  }
+  .product-card__info {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem; 
+  }
+  .product-card__title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-pinhao, #5C3D2E);
+    margin: 0;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+  .product-card__price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-pinhao, #5C3D2E);
+  }
+
+  .collection-pagination {
+    margin-top: 3rem;
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+  }
+
+  /* Mobile */
+  .collection-toolbar-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 900px) {
+    .collection-layout {
+      flex-direction: column;
+    }
+    .collection-sidebar {
+      display: none; /* Escondido no mobile, precisaria de um modal real */
+    }
+    .collection-toolbar-mobile {
+      display: flex;
+      margin-bottom: 2rem;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    .btn-filter-mobile {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 1rem;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.collection",
+  "name": "Catálogo de Produtos",
   "settings": []
 }
 {% endschema %}

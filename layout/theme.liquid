@@ -17,6 +17,11 @@
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
+    <!-- Google Fonts for Country Elegance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
@@ -33,5 +38,14 @@
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
+    
+    <!-- Drawer de Carrinho Persuasivo -->
+    {% render 'cart-drawer' %}
+    
+    <!-- Popups Persuasivos -->
+    {% render 'sales-pop' %}
+    {% comment %}
+      {% render 'exit-intent' %} <!-- Removido: Dark pattern agressivo que causava falsa sensação de saída -->
+    {% endcomment %}
   </body>
 </html>

@@ -23,7 +23,6 @@
           <div class="product-card__info">
             <h3 class="product-card__title">{{ product_item.title }}</h3>
             <span class="product-card__price">{{ product_item.price | money }}</span>
-            <span class="product-card__btn">Ver Detalhes</span>
           </div>
         </a>
       {%- endfor -%}
@@ -37,7 +36,6 @@
           <div class="product-card__info">
             <h3 class="product-card__title">Calçado de Dança</h3>
             <span class="product-card__price">{{ 19990 | money }}</span>
-            <span class="product-card__btn">Ver Detalhes</span>
           </div>
         </div>
       {%- endfor -%}
@@ -55,7 +53,7 @@
   /* Regra 7: Espaço em Branco abundante */
   .featured-collection-section {
     max-width: var(--page-width, 1200px);
-    margin: 6rem auto; /* Margem superior e inferior generosas para o layout respirar */
+    margin: 2rem auto; /* Reduzindo espaço vazio */
     padding: 0 var(--page-margin, 64px);
   }
 
@@ -67,7 +65,7 @@
   .featured-collection__title {
     font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: 800;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0 0 1rem 0;
   }
   
@@ -85,40 +83,36 @@
     gap: 2rem;
   }
 
-  /* Regra 11: Lei da Proximidade */
+  /* Estilo Thursday Boots: Clean, sem box-shadow, foco na imagem */
   .product-card {
     display: flex;
     flex-direction: column;
     text-decoration: none;
     color: inherit;
-    background-color: var(--color-background, #f9f6f0);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background-color: transparent;
+    transition: opacity 0.25s ease;
   }
 
   .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 25px rgba(92, 42, 30, 0.12);
+    opacity: 0.9;
   }
 
   .product-card__image-wrapper {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Quadrado padronizado */
+    aspect-ratio: 4 / 5; /* Formato retrato elegante */
     overflow: hidden;
-    background-color: #f2f2f2;
+    background-color: #f1efe9; /* Fundo neutro do Thursday */
   }
 
   .product-card__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.5s ease;
   }
   
   .product-card:hover .product-card__image {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
 
   .placeholder-svg {
@@ -129,45 +123,27 @@
 
   /* Elementos próximos e coesos para facilitar a leitura */
   .product-card__info {
-    padding: 1.5rem;
+    padding: 1rem 0; /* Apenas espaçamento superior e inferior */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem; 
+    gap: 0.3rem; 
   }
 
   .product-card__title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-pinhao, #5c2a1e);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
   }
 
   .product-card__price {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #1a7b45;
-  }
-
-  .product-card__btn {
-    margin-top: 0.8rem;
-    background-color: var(--color-whisky, #a9673c);
-    color: #fff;
-    padding: 0.7rem 1.8rem;
-    border-radius: 30px;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    width: 100%;
-    text-align: center;
-    transition: background-color 0.2s ease;
-  }
-  
-  .product-card:hover .product-card__btn {
-    background-color: #8c532f;
+    color: var(--color-pinhao, #5C3D2E);
   }
 
   .featured-collection__footer {
@@ -178,17 +154,17 @@
   .btn-view-all {
     display: inline-block;
     padding: 1rem 3rem;
-    border: 2px solid var(--color-pinhao, #5c2a1e);
-    color: var(--color-pinhao, #5c2a1e);
+    border: 2px solid var(--color-pinhao, #5C3D2E);
+    color: var(--color-pinhao, #5C3D2E);
     font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
-    border-radius: 50px;
+    border-radius: 0;
     transition: all 0.2s ease;
   }
   
   .btn-view-all:hover {
-    background-color: var(--color-pinhao, #5c2a1e);
+    background-color: var(--color-pinhao, #5C3D2E);
     color: #fff;
   }
 
@@ -196,7 +172,7 @@
   @media screen and (max-width: 900px) {
     .featured-collection-section {
       padding: 0 0 0 1.5rem; /* Margem apenas na esquerda para permitir sangria à direita */
-      margin: 4rem auto;
+      margin: 2rem auto;
     }
     
     .featured-collection__header {

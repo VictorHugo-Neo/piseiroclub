@@ -37,7 +37,7 @@
 {% stylesheet %}
   .social-proof-section {
     max-width: var(--page-width, 1200px);
-    margin: 6rem auto;
+    margin: 2rem auto;
     padding: 0 var(--page-margin, 64px);
     display: flex;
     flex-direction: column;
@@ -51,7 +51,7 @@
   .social-proof__title {
     font-size: clamp(2rem, 3.5vw, 2.8rem);
     font-weight: 800;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     margin: 0;
     letter-spacing: 0.02em;
   }
@@ -70,7 +70,7 @@
     aspect-ratio: 1 / 1; /* Mantém a identidade clássica de um feed quadrado (simetria) */
     overflow: hidden;
     background-color: #f0f0f0;
-    border-radius: 8px; /* Cantos arredondados, leve e moderno */
+    border-radius: 0; /* Cantos arredondados, leve e moderno */
     display: block;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
@@ -136,17 +136,17 @@
     padding: 1rem 3.5rem;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--color-pinhao, #5c2a1e);
+    color: var(--color-pinhao, #5C3D2E);
     text-transform: uppercase;
     text-decoration: none;
     letter-spacing: 0.1em;
-    border: 2px solid var(--color-pinhao, #5c2a1e);
-    border-radius: 40px;
+    border: 2px solid var(--color-pinhao, #5C3D2E);
+    border-radius: 0;
     transition: all 0.2s ease;
   }
 
   .social-proof__btn:hover {
-    background-color: var(--color-pinhao, #5c2a1e);
+    background-color: var(--color-pinhao, #5C3D2E);
     color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(92, 42, 30, 0.2);
@@ -156,7 +156,7 @@
   @media screen and (max-width: 900px) {
     .social-proof-section {
       padding: 0 0 0 1.5rem; /* Margem apenas lado esquerdo */
-      margin: 4rem auto;
+      margin: 2rem auto;
     }
     
     .social-proof__header {

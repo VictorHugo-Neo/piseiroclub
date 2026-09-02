@@ -1,0 +1,154 @@
+<div id="cart-drawer" class="cart-drawer-overlay" aria-hidden="true">
+  <div class="cart-drawer-content">
+    <div class="cart-drawer-header">
+      <h2>Sua Sacola</h2>
+      <button id="close-cart-drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <div class="free-shipping-progress" id="free-shipping-progress">
+      <p id="fs-text">Faltam <strong>R$ 35,00</strong> para <span>Frete Grátis</span></p>
+      <div class="fs-bar-bg"><div class="fs-bar-fill" id="fs-fill" style="width: 50%;"></div></div>
+    </div>
+
+    <div class="cart-drawer-items" id="cart-drawer-items">
+      <!-- JS -->
+    </div>
+
+    <div class="cart-upsell">
+      <p class="upsell-title">Adicione à sua sacola</p>
+      <div class="upsell-item">
+        <div class="upsell-info">Garantia Estendida VIP</div>
+        <button class="btn-upsell-add">+ R$ 19,90</button>
+      </div>
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-total">
+        <span>Subtotal</span>
+        <strong id="cart-drawer-total">R$ 0,00</strong>
+      </div>
+      <form action="/cart" method="post" id="cart-drawer-form">
+        <button type="submit" name="checkout" class="btn-buy drawer-checkout-btn">
+          Finalizar Compra
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .cart-drawer-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+    z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+  }
+  .cart-drawer-overlay.active { opacity: 1; pointer-events: auto; }
+  
+  .cart-drawer-content {
+    position: absolute; top: 0; right: -450px;
+    width: 100%; max-width: 420px; height: 100%;
+    background: #fff; box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+    transition: right 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex; flex-direction: column;
+  }
+  .cart-drawer-overlay.active .cart-drawer-content { right: 0; }
+  
+  .cart-drawer-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 25px; border-bottom: 1px solid #f0f0f0;
+  }
+  .cart-drawer-header h2 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400; color: #111; }
+  #close-cart-drawer { background: none; border: none; cursor: pointer; color: #555; transition: transform 0.3s ease;}
+  #close-cart-drawer:hover { transform: rotate(90deg); }
+
+  .free-shipping-progress { padding: 20px 25px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+  .free-shipping-progress p { margin: 0 0 12px 0; font-size: 0.85rem; color: #666; text-align: center; text-transform: uppercase; letter-spacing: 0.05em;}
+  .free-shipping-progress span { color: #111; font-weight: 500; }
+  .fs-bar-bg { width: 100%; height: 2px; background: #e0e0e0; overflow: hidden; }
+  .fs-bar-fill { height: 100%; background: #111; transition: width 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
+
+  .cart-drawer-items { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; }
+  .drawer-item { display: flex; gap: 15px; }
+  .drawer-item img { width: 80px; height: 100px; object-fit: cover; }
+  .drawer-item-info { flex: 1; display: flex; flex-direction: column; justify-content: center;}
+  .drawer-item-title { font-weight: 400; font-size: 0.9rem; color: #111; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em;}
+  .drawer-item-price { font-weight: 300; color: #666; font-size: 0.9rem;}
+  
+  .cart-upsell { padding: 20px 25px; background: #fff; border-top: 1px solid #f0f0f0; }
+  .upsell-title { margin: 0 0 15px 0; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em;}
+  .upsell-item { display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; padding: 12px 15px; }
+  .upsell-info { font-weight: 400; font-size: 0.85rem; color: #333;}
+  .btn-upsell-add { background: transparent; color: #111; border: 1px solid #111; padding: 6px 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s;}
+  .btn-upsell-add:hover { background: #111; color: #fff;}
+
+  .cart-drawer-footer { padding: 25px; border-top: 1px solid #f0f0f0; background: #fff; }
+  .cart-total { display: flex; justify-content: space-between; font-size: 1.1rem; margin-bottom: 25px; color: #111; text-transform: uppercase; letter-spacing: 0.05em;}
+  
+  .drawer-checkout-btn {
+    width: 100%; padding: 18px; background: #111; color: #fff;
+    border: 1px solid #111; font-size: 0.95rem; font-weight: 400;
+    text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .drawer-checkout-btn:hover { background: transparent; color: #111; }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const drawer = document.getElementById('cart-drawer');
+    const closeBtn = document.getElementById('close-cart-drawer');
+    const itemsContainer = document.getElementById('cart-drawer-items');
+    const totalEl = document.getElementById('cart-drawer-total');
+    const fsFill = document.getElementById('fs-fill');
+    const fsText = document.getElementById('fs-text');
+    const freeShippingGoal = 15000;
+
+    function formatMoney(cents) { return 'R$ ' + (cents / 100).toFixed(2).replace('.', ','); }
+
+    async function fetchCart() {
+      try {
+        const res = await fetch('/cart.js'); const cart = await res.json();
+        itemsContainer.innerHTML = '';
+        if(cart.items.length === 0) {
+          itemsContainer.innerHTML = '<p style="text-align:center; color:#999; margin-top:40px; font-weight:300;">Sua sacola está vazia.</p>';
+          totalEl.textContent = 'R$ 0,00'; fsFill.style.width = '0%';
+          fsText.innerHTML = `Faltam <strong>${formatMoney(freeShippingGoal)}</strong> para <span>Frete Grátis</span>`;
+          return;
+        }
+
+        cart.items.forEach(item => {
+          itemsContainer.innerHTML += `
+            <div class="drawer-item">
+              <img src="${item.featured_image.url}" alt="${item.title}">
+              <div class="drawer-item-info">
+                <p class="drawer-item-title">${item.title}</p>
+                <span class="drawer-item-price">${formatMoney(item.price)}</span>
+              </div>
+            </div>`;
+        });
+        
+        totalEl.textContent = formatMoney(cart.total_price);
+        if(cart.total_price >= freeShippingGoal) {
+          fsFill.style.width = '100%'; fsText.innerHTML = 'Você atingiu o <span>Frete Grátis</span>';
+        } else {
+          const diff = freeShippingGoal - cart.total_price;
+          fsFill.style.width = `${(cart.total_price / freeShippingGoal) * 100}%`;
+          fsText.innerHTML = `Faltam <strong>${formatMoney(diff)}</strong> para <span>Frete Grátis</span>`;
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function openDrawer() { fetchCart(); drawer.classList.add('active'); }
+    if(closeBtn) closeBtn.addEventListener('click', () => drawer.classList.remove('active'));
+    document.querySelectorAll('a[href="/cart"]').forEach(a => a.addEventListener('click', (e) => { e.preventDefault(); openDrawer(); }));
+    document.addEventListener('submit', function(e) {
+      if(e.target.action && e.target.action.includes('/cart/add')) {
+        e.preventDefault();
+        fetch('/cart/add.js', { method: 'POST', body: new FormData(e.target) })
+        .then(() => openDrawer()).catch(err => console.error(err));
+      }
+    });
+  });
+{% endjavascript %}

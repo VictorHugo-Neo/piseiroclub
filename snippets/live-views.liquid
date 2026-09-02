@@ -1,0 +1,56 @@
+{% doc %}
+  Renders an elegant live viewers counter.
+{% enddoc %}
+
+<div class="live-views-premium">
+  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+  </svg>
+  <span class="live-text"><span id="live-viewers">12</span> pessoas adicionaram este item ao carrinho hoje</span>
+</div>
+
+{% stylesheet %}
+  .live-views-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    background: #F9F8F6;
+    padding: 8px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+  .eye-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-whisky, #A67C52);
+    fill: rgba(166, 124, 82, 0.2);
+  }
+  .live-text {
+    font-weight: 400;
+  }
+  .live-text span {
+    font-weight: 700;
+    color: var(--color-pinhao, #5C3D2E);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    const viewersEl = document.getElementById('live-viewers');
+    if (viewersEl) {
+      let currentViewers = Math.floor(Math.random() * 15) + 15;
+      viewersEl.textContent = currentViewers;
+      
+      setInterval(() => {
+        const change = Math.floor(Math.random() * 5) - 2;
+        currentViewers += change;
+        if (currentViewers < 5) currentViewers = 5;
+        viewersEl.textContent = currentViewers;
+      }, 7000);
+    }
+  });
+{% endjavascript %}

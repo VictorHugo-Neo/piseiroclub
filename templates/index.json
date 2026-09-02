@@ -10,6 +10,38 @@
         "button_link": "shopify:\/\/collections\/all"
       }
     },
+    "categories": {
+      "type": "category-list",
+      "blocks": {
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "title": "Masculino",
+            "link": "shopify:\/\/collections\/all"
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "title": "Feminino",
+            "link": "shopify:\/\/collections\/all"
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "title": "Acessórios",
+            "link": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3"
+      ],
+      "settings": {}
+    },
     "benefits": {
       "type": "store-benefits",
       "settings": {}
@@ -34,6 +66,7 @@
   },
   "order": [
     "hero",
+    "categories",
     "benefits",
     "destaques",
     "social",
