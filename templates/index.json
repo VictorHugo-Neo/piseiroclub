@@ -3,10 +3,10 @@
     "hero": {
       "type": "hero-banner",
       "settings": {
-        "title": "Sinta o Ritmo do Forró",
-        "subtitle": "O par de calçados ideal para você dançar a noite inteira com conforto, firmeza e muito estilo.",
+        "title": "Elegância & Tradição",
+        "subtitle": "O legítimo estilo country. Botas artesanais, acessórios premium e vestuário feito para durar.",
         "overlay_opacity": 55,
-        "button_label": "Ver Calçados",
+        "button_label": "Explorar Coleção",
         "button_link": "shopify:\/\/collections\/all"
       }
     },
@@ -42,6 +42,10 @@
       ],
       "settings": {}
     },
+    "storytelling": {
+      "type": "image-with-text",
+      "settings": {}
+    },
     "benefits": {
       "type": "store-benefits",
       "settings": {}
@@ -50,7 +54,7 @@
       "type": "featured-collection",
       "settings": {
         "title": "Mais Vendidos",
-        "description": "Os calçados mais procurados pelos dançarinos de Piseiro e Forró.",
+        "description": "As peças mais cobiçadas da nossa coleção premium.",
         "products_to_show": 4,
         "show_view_all": true
       }
@@ -67,6 +71,7 @@
   "order": [
     "hero",
     "categories",
+    "storytelling",
     "benefits",
     "destaques",
     "social",

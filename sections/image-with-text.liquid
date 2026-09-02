@@ -1,0 +1,162 @@
+<div class="image-with-text {% if section.settings.layout == 'text_first' %}image-with-text--reverse{% endif %}">
+  <div class="image-with-text__media">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'iwt-img' }}
+    {%- else -%}
+      {{ 'collection-1' | placeholder_svg_tag: 'iwt-img placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  
+  <div class="image-with-text__content-wrapper">
+    <div class="image-with-text__content">
+      <h2 class="iwt-title">{{ section.settings.title | escape }}</h2>
+      <div class="iwt-text">{{ section.settings.text }}</div>
+      
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link }}" class="iwt-button">
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% style %}
+  .image-with-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--color-background-secondary, #FFFFFF);
+  }
+  
+  @media screen and (min-width: 768px) {
+    .image-with-text {
+      flex-direction: row;
+      align-items: center;
+      min-height: 600px;
+    }
+    
+    .image-with-text--reverse {
+      flex-direction: row-reverse;
+    }
+    
+    .image-with-text__media,
+    .image-with-text__content-wrapper {
+      width: 50%;
+    }
+  }
+
+  .image-with-text__media {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .iwt-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-with-text__content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+
+  .image-with-text__content {
+    max-width: 500px;
+  }
+
+  .iwt-title {
+    font-family: var(--font-heading, serif);
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    color: var(--color-foreground);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  .iwt-text {
+    font-family: var(--font-body, sans-serif);
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .iwt-button {
+    display: inline-block;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+    padding: 1rem 2.5rem;
+    transition: opacity 0.3s ease;
+  }
+  
+  .iwt-button:hover {
+    opacity: 0.8;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Imagem com Texto",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagem"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Posição da Imagem (Desktop)",
+      "options": [
+        { "value": "image_first", "label": "Esquerda" },
+        { "value": "text_first", "label": "Direita" }
+      ],
+      "default": "image_first"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "A Arte do Couro Legítimo"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Cada peça da nossa coleção é forjada com materiais premium e dedicação artesanal. Feitas para resistir ao tempo e manter a elegância bruta que só o estilo country autêntico possui.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do Botão",
+      "default": "Conheça a História"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do Botão"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Imagem com Texto"
+    }
+  ]
+}
+{% endschema %}

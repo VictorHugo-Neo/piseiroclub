@@ -1,0 +1,71 @@
+{%- if section.settings.show_announcement -%}
+  <div class="announcement-bar full-width" role="region" aria-label="Anúncio">
+    <div class="announcement-bar__message">
+      {{ section.settings.text | escape }}
+    </div>
+  </div>
+{%- endif -%}
+
+{% style %}
+  .announcement-bar {
+    background-color: {{ section.settings.bg_color | default: '#111111' }};
+    color: {{ section.settings.text_color | default: '#FFFFFF' }};
+    text-align: center;
+    padding: 8px 15px;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1001; /* Fica acima do header na ordem natural do HTML */
+    border-bottom: none;
+    box-shadow: none;
+  }
+  
+  .announcement-bar__message {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Barra de Anúncios",
+  "class": "section-no-padding",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Mostrar barra de anúncios",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "default": "Frete Grátis para todo o Brasil nas compras acima de R$ 299"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Cor de Fundo",
+      "default": "#1C1917"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do Texto",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barra de Anúncios"
+    }
+  ]
+}
+{% endschema %}

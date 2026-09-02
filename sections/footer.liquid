@@ -14,6 +14,8 @@
 {%- capture icon_shield -%}<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>{%- endcapture -%}
 {%- capture icon_lock -%}<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>{%- endcapture -%}
 {%- capture icon_truck -%}<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>{%- endcapture -%}
+{%- capture icon_google -%}<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.344-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0 5.483 0 0 5.483 0 12s5.483 12 12.24 12c7.053 0 11.72-4.962 11.72-11.933 0-.806-.085-1.393-.19-1.782h-11.53z"/></svg>{%- endcapture -%}
+{%- capture icon_norton -%}<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>{%- endcapture -%}
 
 <footer class="footer full-width footer-{{ section.id }}">
   <div class="footer-container">
@@ -70,16 +72,52 @@
 
             {%- when 'guarantees' -%}
               <h4 class="footer-col-title">{{ block.settings.title | escape }}</h4>
-              <ul class="footer-guarantees">
-                <li><span class="icon">{{ icon_lock }}</span> Pagamento Seguro</li>
-                <li><span class="icon">{{ icon_truck }}</span> Entrega Rápida</li>
-                <li><span class="icon">{{ icon_shield }}</span> Troca Garantida</li>
-              </ul>
+              <div class="footer-guarantees-badges">
+                <div class="guarantee-badge">
+                  <div class="guarantee-icon">{{ icon_lock }}</div>
+                  <div class="guarantee-text">
+                    <strong>Pagamento Seguro</strong>
+                    <span>Ambiente Criptografado</span>
+                  </div>
+                </div>
+                <div class="guarantee-badge">
+                  <div class="guarantee-icon">{{ icon_truck }}</div>
+                  <div class="guarantee-text">
+                    <strong>Entrega Rápida</strong>
+                    <span>Para todo o Brasil</span>
+                  </div>
+                </div>
+                <div class="guarantee-badge">
+                  <div class="guarantee-icon">{{ icon_shield }}</div>
+                  <div class="guarantee-text">
+                    <strong>Troca Garantida</strong>
+                    <span>7 dias após receber</span>
+                  </div>
+                </div>
+              </div>
 
           {%- endcase -%}
         </div>
       {%- endfor -%}
     </div>
+
+    <!-- Security Badges Row -->
+    {%- if section.settings.show_security_badges -%}
+      <div class="footer-security-row">
+        <h5 class="security-row-title">Compra 100% Segura e Verificada</h5>
+        <div class="security-badges-list">
+          <div class="sec-badge">
+            {{ icon_lock }} <span><strong>SSL</strong> 256-bit</span>
+          </div>
+          <div class="sec-badge">
+            {{ icon_google }} <span><strong>Google</strong> Safe Browsing</span>
+          </div>
+          <div class="sec-badge">
+            {{ icon_norton }} <span><strong>Norton</strong> Secured</span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
 
     <!-- Bottom Bar (Social, Copyright) -->
     <div class="footer-bottom">
@@ -98,11 +136,15 @@
       
       <div class="footer-bottom-right">
         {%- if section.settings.show_payment_icons -%}
-          <ul class="footer-payments">
-            {%- for type in shop.enabled_payment_types -%}
-              <li>{{ type | payment_type_svg_tag }}</li>
-            {%- endfor -%}
-          </ul>
+          <div class="footer-payments-wrapper">
+            <span class="footer-payments-title">Formas de Pagamento</span>
+            <ul class="footer-payments">
+              {%- assign payment_types = 'visa,master,amex,discover,diners_club,pix,boleto' | split: ',' -%}
+              {%- for type in payment_types -%}
+                <li>{{ type | payment_type_svg_tag }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -123,7 +165,7 @@
   .footer-newsletter-button:hover { transform: translateX(5px); }
 
   /* Grid 4 Colunas */
-  .footer-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 3rem; margin-bottom: 4rem; }
+  .footer-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 3rem; margin-bottom: 3rem; }
   @media (min-width: 768px) { .footer-grid { grid-template-columns: repeat(4, 1fr); } }
   
   .footer-col-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.5rem; opacity: 0.9; }
@@ -136,13 +178,28 @@
   .footer-links a { text-decoration: none; color: inherit; font-size: 0.9rem; opacity: 0.7; transition: opacity 0.3s; }
   .footer-links a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
   
-  /* Guarantees Minimal */
-  .footer-guarantees { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
-  .footer-guarantees li { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; opacity: 0.8; }
-  .footer-guarantees .icon svg { width: 18px; height: 18px; color: currentColor; }
+  /* Guarantees Minimal Badges */
+  .footer-guarantees-badges { display: flex; flex-direction: column; gap: 1rem; }
+  .guarantee-badge { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); transition: background 0.3s; }
+  .guarantee-badge:hover { background: rgba(255,255,255,0.1); }
+  .guarantee-icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 50%; color: inherit; }
+  .guarantee-icon svg { width: 18px; height: 18px; }
+  .guarantee-text { display: flex; flex-direction: column; line-height: 1.3; }
+  .guarantee-text strong { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .guarantee-text span { font-size: 0.75rem; opacity: 0.7; }
+
+  /* Security Badges Row */
+  .footer-security-row { border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 2rem 0; margin-bottom: 2rem; text-align: center; }
+  .security-row-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-top: 0; margin-bottom: 1.2rem; font-weight: 600; }
+  .security-badges-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+  .sec-badge { display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 4px; font-size: 0.8rem; opacity: 0.8; transition: opacity 0.3s; }
+  .sec-badge:hover { opacity: 1; border-color: rgba(255,255,255,0.4); }
+  .sec-badge svg { width: 16px; height: 16px; }
+  .sec-badge span { line-height: 1; }
+  .sec-badge strong { font-weight: 700; }
 
   /* Bottom Bar */
-  .footer-bottom { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); gap: 1.5rem; font-size: 0.8rem; opacity: 0.6; }
+  .footer-bottom { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 1.5rem; font-size: 0.8rem; opacity: 0.6; }
   @media (min-width: 768px) { .footer-bottom { flex-direction: row; } }
   
   .footer-social { list-style: none; padding: 0; margin: 0; display: flex; gap: 1.5rem; }
@@ -150,18 +207,23 @@
   .footer-social a:hover { opacity: 1; }
   .footer-social svg { width: 20px; height: 20px; }
   
+  .footer-payments-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  @media (min-width: 768px) { .footer-payments-wrapper { align-items: flex-end; } }
+  .footer-payments-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.5; }
   .footer-payments { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
   .footer-payments svg { width: 34px; height: 20px; }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Footer Premium",
+  "name": "Rodapé Premium",
+  "class": "section-no-padding",
   "settings": [
     { "type": "color", "id": "bg_color", "label": "Cor de fundo", "default": "#111111" },
     { "type": "color", "id": "text_color", "label": "Cor do texto", "default": "#ffffff" },
     { "type": "text", "id": "top_text", "label": "Título da Newsletter", "default": "Junte-se à Nossa Lista VIP" },
     { "type": "checkbox", "id": "show_payment_icons", "label": "Mostrar ícones de pagamento", "default": true },
+    { "type": "checkbox", "id": "show_security_badges", "label": "Mostrar selos de segurança", "default": true },
     { "type": "checkbox", "id": "show_social_icons", "label": "Mostrar redes sociais", "default": true },
     { "type": "url", "id": "social_instagram", "label": "Instagram" },
     { "type": "url", "id": "social_facebook", "label": "Facebook" },

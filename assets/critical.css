@@ -73,19 +73,6 @@ p:empty {
 
 /** Theme styles below */
 :root {
-  /* Cores - Country Elegance */
-  --color-primary: #5C3D2E;
-  --color-secondary: #A67C52;
-  --color-background: #F9F8F6;
-  --color-surface: #FFFFFF;
-  --color-text: #2D2422;
-  --color-text-light: #6D6461;
-
-  /* Compatibilidade com as variáveis anteriores das seções */
-  --color-pinhao: var(--color-primary);
-  --color-whisky: var(--color-secondary);
-  --color-foreground: var(--color-text);
-
   /* Fontes - Country Elegance */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;

@@ -54,41 +54,55 @@
     ]
   },
   {
-    "name": "Cores Rústicas",
+    "name": "Cores da Loja (E-commerce Senior)",
     "settings": [
       {
         "type": "color",
-        "id": "color_pinhao",
-        "default": "#5C2A1E",
-        "label": "Pinhão"
+        "id": "color_background",
+        "default": "#F9F8F6",
+        "label": "Fundo da Página (Background Principal)"
       },
       {
         "type": "color",
-        "id": "color_whisky",
-        "default": "#A9673C",
-        "label": "Whisky"
+        "id": "color_background_secondary",
+        "default": "#FFFFFF",
+        "label": "Fundo Secundário (Cartões, Caixas)"
       },
       {
         "type": "color",
-        "id": "background_color",
-        "default": "#F9F6F0",
-        "label": "Fundo Off-White quente"
+        "id": "color_text_primary",
+        "default": "#1C1917",
+        "label": "Texto Principal (Títulos, Texto Escuro)"
       },
       {
         "type": "color",
-        "id": "foreground_color",
-        "default": "#5C2A1E",
-        "label": "Texto Principal (Pinhão)"
+        "id": "color_text_secondary",
+        "default": "#78716C",
+        "label": "Texto Secundário (Descrições, Muted)"
       },
       {
-        "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "unit": "px",
-        "label": "t:labels.input_corner_radius",
-        "default": 0
+        "type": "color",
+        "id": "color_accent",
+        "default": "#5C3D2E",
+        "label": "Cor de Destaque (Botões Primários, Links)"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_hover",
+        "default": "#422A1F",
+        "label": "Cor de Destaque Hover (Ação Secundária)"
+      },
+      {
+        "type": "color",
+        "id": "color_button_text",
+        "default": "#FFFFFF",
+        "label": "Texto do Botão Primário"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "default": "#E7E5E4",
+        "label": "Bordas e Divisores"
       }
     ]
   }

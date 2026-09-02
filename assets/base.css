@@ -23,6 +23,14 @@ body {
   margin: 0;
   padding: 0;
   
+  /* Remove o padding padrão da Shopify em seções ponta-a-ponta */
+  --section-padding: 0;
+}
+
+.section-no-padding {
+  padding: 0 !important;
+}
+  
   /* Impede barra de rolagem horizontal em telas minúsculas (menores que 320px) */
   min-width: 320px;
   overflow-x: hidden;

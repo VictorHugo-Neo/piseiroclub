@@ -3,12 +3,22 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_announcement": true,
+        "text": "Frete Grátis para todo o Brasil nas compras acima de R$ 299",
+        "bg_color": "#1C1917",
+        "text_color": "#ffffff"
+      }
+    },
     "header": {
       "type": "header",
       "settings": {}
     }
   },
   "order": [
+    "announcement-bar",
     "header"
   ]
 }

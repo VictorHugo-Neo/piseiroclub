@@ -3,8 +3,15 @@
 {% enddoc %}
 
 <div id="sales-pop" class="sales-pop-premium">
+  <div class="sp-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+  </div>
   <div class="sp-info-p">
-    <p class="sp-action-p"><strong id="sp-name">João</strong> de <span id="sp-city">São Paulo</span> adquiriu <strong id="sp-product">Camiseta</strong></p>
+    <span class="sp-title">Compra Verificada</span>
+    <p class="sp-action-p"><strong id="sp-name">João</strong> (de <span id="sp-city">São Paulo</span>) acabou de garantir o seu <strong id="sp-product">Produto</strong>.</p>
     <p class="sp-time-p"><small id="sp-time">há 2 minutos</small></p>
   </div>
 </div>
@@ -12,21 +19,40 @@
 {% stylesheet %}
   .sales-pop-premium {
     position: fixed; bottom: 30px; left: 30px;
-    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
-    border: 1px solid rgba(0,0,0,0.05);
-    display: flex; align-items: center; padding: 15px 25px;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent);
+    display: flex; align-items: flex-start; gap: 15px; padding: 16px;
     z-index: 9998; max-width: 320px;
     transform: translateY(20px); opacity: 0;
-    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     pointer-events: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    border-radius: 6px;
+    font-family: var(--font-body, sans-serif);
   }
+  
   .sales-pop-premium.show { transform: translateY(0); opacity: 1; }
-  .sp-info-p p { margin: 0; font-size: 0.8rem; color: #111; line-height: 1.4; font-weight: 300;}
-  .sp-info-p strong { font-weight: 500; }
-  .sp-time-p { color: #888 !important; margin-top: 4px !important; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem !important;}
+  
+  .sp-icon {
+    flex-shrink: 0;
+    color: var(--color-accent);
+    margin-top: 2px;
+  }
+  
+  .sp-icon svg { width: 22px; height: 22px; }
+  
+  .sp-info-p { display: flex; flex-direction: column; gap: 4px; }
+  
+  .sp-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-secondary); font-weight: 700; }
+  
+  .sp-info-p p { margin: 0; font-size: 0.85rem; color: var(--color-foreground); line-height: 1.4; font-weight: 400;}
+  .sp-info-p strong { font-weight: 600; color: #000; }
+  
+  .sp-time-p { color: var(--color-text-secondary) !important; margin-top: 2px !important; font-size: 0.75rem !important; font-style: italic;}
+  
   @media (max-width: 768px) {
-    .sales-pop-premium { bottom: 80px; left: 20px; right: 20px; max-width: calc(100% - 40px); }
+    .sales-pop-premium { bottom: 85px; left: 5%; right: 5%; width: 90%; max-width: 100%; border-left: 3px solid var(--color-accent); }
   }
 {% endstylesheet %}
 

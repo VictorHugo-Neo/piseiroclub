@@ -3,50 +3,106 @@
 {% enddoc %}
 
 <div class="countdown-premium">
-  <div class="countdown-header">Condição Especial de Frete Grátis expira em:</div>
-  <div class="countdown-timer-minimal">
-    <span id="cd-hours" class="cd-number">04</span><span class="cd-label">h</span>
-    <span class="cd-sep"></span>
-    <span id="cd-minutes" class="cd-number">12</span><span class="cd-label">m</span>
-    <span class="cd-sep"></span>
-    <span id="cd-seconds" class="cd-number">35</span><span class="cd-label">s</span>
+  <div class="countdown-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+  </div>
+  <div class="countdown-content">
+    <span class="countdown-header"><strong>Frete Grátis</strong> termina em:</span>
+    <div class="countdown-timer-minimal">
+      <span id="cd-hours" class="cd-number">04</span><span class="cd-label">h</span>
+      <span class="cd-sep">:</span>
+      <span id="cd-minutes" class="cd-number">12</span><span class="cd-label">m</span>
+      <span class="cd-sep">:</span>
+      <span id="cd-seconds" class="cd-number">35</span><span class="cd-label">s</span>
+    </div>
   </div>
 </div>
 
 {% stylesheet %}
   .countdown-premium {
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: -5px; /* Puxa o botão de comprar mais para perto */
     padding: 12px 15px;
-    background-color: #f7f3ed;
-    border: 1px solid rgba(166, 124, 82, 0.2);
+    background-color: rgba(92, 61, 46, 0.05); /* Fundo sutil com a cor accent */
+    border: 1px dashed var(--color-accent); /* Borda tracejada remete a cupom/oferta */
+    border-radius: 4px;
     display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .countdown-icon {
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .countdown-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .countdown-content {
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 5px;
   }
+
   .countdown-header {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #777;
+    font-size: 0.85rem;
+    color: var(--color-foreground);
+    line-height: 1.2;
   }
+  
+  .countdown-header strong {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
   .countdown-timer-minimal {
     display: flex;
     align-items: baseline;
-    color: #333;
+    background: #ffffff;
+    padding: 4px 8px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
   }
+  
   .cd-number {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .cd-label {
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    margin-left: 1px;
+    margin-right: 4px;
+    text-transform: lowercase;
     font-weight: 500;
   }
-  .cd-label {
-    font-size: 0.75rem;
-    color: #999;
-    margin-left: 2px;
-    margin-right: 8px;
-    text-transform: uppercase;
-  }
+  
   .cd-sep {
-    display: none;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin: 0 2px;
+    opacity: 0.5;
+  }
+  
+  @media (max-width: 400px) {
+    .countdown-content { flex-direction: column; align-items: flex-start; }
+    .countdown-premium { align-items: flex-start; }
   }
 {% endstylesheet %}
 

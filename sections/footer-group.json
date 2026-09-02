@@ -8,6 +8,7 @@
         "bg_color": "#111111",
         "text_color": "#ffffff",
         "top_text": "Junte-se à Nossa Lista VIP",
+        "show_security_badges": true,
         "show_payment_icons": true,
         "show_social_icons": true
       },

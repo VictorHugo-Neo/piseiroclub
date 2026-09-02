@@ -11,8 +11,19 @@
     --font-primary--weight: {{ settings.type_primary_font.weight }};
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
+    --color-background: {{ settings.color_background }};
+    --color-background-secondary: {{ settings.color_background_secondary }};
+    --color-foreground: {{ settings.color_text_primary }};
+    --color-text-secondary: {{ settings.color_text_secondary }};
+    --color-accent: {{ settings.color_accent }};
+    --color-accent-hover: {{ settings.color_accent_hover }};
+    --color-button-text: {{ settings.color_button_text }};
+    --color-border: {{ settings.color_border }};
+    
+    /* Legacy fallbacks */
+    --color-pinhao: {{ settings.color_text_primary }};
+    --color-whisky: {{ settings.color_accent }};
+    
     --style-border-radius-inputs: 0px;
   }
 {% endstyle %}
